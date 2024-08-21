@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/product_form.css' %}" />
+    <title>Login</title>
+  </head>
+
+  <body>
+    <!-- Message Block for Displaying Feedback -->
+    {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+      <div class="alert {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <br />
+
+    <div class="container" id="container">
+      <!-- Sign-in Form -->
+      <div class="form-container sign-in">
+        <form method="POST" action="">
+          {% csrf_token %}
+          <h1>Sign In</h1>
+          <input type="email" placeholder="Email" name="email" required />
+          <input
+            type="password"
+            placeholder="Password"
+            name="password"
+            required
+          />
+          <a href="#">Forget Your Password?</a>
+          <button type="submit" name="signin">Sign In</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
