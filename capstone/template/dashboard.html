@@ -7,6 +7,8 @@
   </head>
   <body>
     <h1>Dashboard {{request.user.username}}</h1>
+    <a href="{% url 'product_form' %}"> Product form </a>
+    <br />
     <a href="{% url 'logout' %}"> Logout </a>
   </body>
 </html>
