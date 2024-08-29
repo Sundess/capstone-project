@@ -46,7 +46,7 @@ def auth_view(request):
                     messages.error(request, "Invalid email or password!")
             except User.DoesNotExist:
                 messages.error(request, "Email does not exist!")
-    return render(request, 'auth.html')
+    return render(request, 'pages/auth.html')
 
 
 def logout_view(request):
@@ -56,4 +56,4 @@ def logout_view(request):
 
 @login_required(login_url="login")
 def dashboard_view(request):
-    return render(request, 'dashboard.html')
+    return render(request, 'pages/dashboard.html')

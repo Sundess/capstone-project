@@ -1,0 +1,89 @@
+{% extends 'main_layout.html' %} {% load static %} {%block title%} Login
+{%endblock title%} {%block style%}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}" />
+{%endblock style%} {%block body %}
+<!-- Message Block for Displaying Feedback -->
+{% if messages %}
+<div class="messages">
+  {% for message in messages %}
+  <div class="alert {{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+<br />
+
+<div class="container" id="container">
+  <!-- Sign-up Form -->
+  <div class="form-container sign-up">
+    <form method="POST" action="">
+      {% csrf_token %}
+      <h1>Create Account</h1>
+      <input
+        type="text"
+        placeholder="Username"
+        name="username"
+        id="username"
+        required
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        name="email"
+        id="email"
+        required
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        id="password"
+        name="password"
+        required
+      />
+      <button type="submit" name="signup">Sign Up</button>
+    </form>
+  </div>
+
+  <!-- Sign-in Form -->
+  <div class="form-container sign-in">
+    <form method="POST" action="">
+      {% csrf_token %}
+      <h1>Sign In</h1>
+      <input type="email" placeholder="Email" name="email" required />
+      <input type="password" placeholder="Password" name="password" required />
+      <a href="#">Forget Your Password?</a>
+      <button type="submit" name="signin">Sign In</button>
+    </form>
+  </div>
+
+  <!-- Toggle Panels for Sign In and Sign Up -->
+  <div class="toggle-container">
+    <div class="toggle">
+      <div class="toggle-panel toggle-left">
+        <h1>Welcome Back!</h1>
+        <p>Enter your personal details to use all site features</p>
+        <button class="hidden" id="login">Sign In</button>
+      </div>
+      <div class="toggle-panel toggle-right">
+        <h1>Welcome to Sentiment Spark,</h1>
+        <p>Register with your personal details to use all site features</p>
+        <button class="hidden" id="register">Sign Up</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Script to Handle Toggle -->
+<script>
+  const container = document.getElementById("container");
+  const registerBtn = document.getElementById("register");
+  const loginBtn = document.getElementById("login");
+
+  registerBtn.addEventListener("click", () => {
+    container.classList.add("active");
+  });
+
+  loginBtn.addEventListener("click", () => {
+    container.classList.remove("active");
+  });
+</script>
+{% endblock body %}

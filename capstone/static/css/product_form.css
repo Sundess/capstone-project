@@ -1,158 +1,155 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
 }
 
-body{
-    background-color: #c9d6ff;
-    background: linear-gradient(to right, #e2e2e2, #c9d6ff);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    height: 100vh;
+body {
+  background-color: #c9d6ff;
+  background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
 }
 
-.container{
-    background-color: #fff;
-    border-radius: 30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-    position: relative;
-    overflow: hidden;
-    width: 768px;
-    max-width: 100%;
-    min-height: 580px;
+.container {
+  background-color: #fff;
+  border-radius: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+  width: 768px;
+  max-width: 100%;
+  min-height: 580px;
 }
 
-.container p{
-    font-size: 14px;
-    line-height: 20px;
-    letter-spacing: 0.3px;
-    margin: 20px 0;
+.container p {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.3px;
+  margin: 20px 0;
 }
 
-.container span{
-    font-size: 14px;
-    padding: 8px;
+.container span {
+  font-size: 14px;
+  padding: 8px;
 }
 
-.container a{
-    color: #333;
-    font-size: 13px;
-    text-decoration: none;
-    margin: 15px 0 10px;
+.container a {
+  color: #333;
+  font-size: 13px;
+  text-decoration: none;
+  margin: 15px 0 10px;
 }
 
-.container button{
-    background-color: #512da8;
-    color: #fff;
-    font-size: 12px;
-    padding: 10px 45px;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    margin-top: 10px;
-    cursor: pointer;
+.container button {
+  background-color: #512da8;
+  color: #fff;
+  font-size: 12px;
+  padding: 10px 45px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  cursor: pointer;
 }
 
-.container form{
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0 40px;
-    height: 100%;
+.container form {
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 40px;
+  height: 100%;
 }
 
-.container input{
-    background-color: #eee;
-    border: none;
-    margin: 8px 0;
-    padding: 10px 15px;
-    font-size: 13px;
-    border-radius: 8px;
-    width: 100%;
-    outline: none;
+.container input {
+  background-color: #eee;
+  border: none;
+  margin: 8px 0;
+  padding: 10px 15px;
+  font-size: 13px;
+  border-radius: 8px;
+  width: 100%;
+  outline: none;
 }
 
-.container textarea{
-    background-color: #eee;
-    border: none;
-    margin: 8px 0;
-    padding: 10px 15px;
-    font-size: 13px;
-    border-radius: 8px;
-    width: 100%;
-    resize: none;
-    outline: none;
+.container textarea {
+  background-color: #eee;
+  border: none;
+  margin: 8px 0;
+  padding: 10px 15px;
+  font-size: 13px;
+  border-radius: 8px;
+  width: 100%;
+  resize: none;
+  outline: none;
 }
 
-.form-container{
-    height: 100%;
+.form-container {
+  height: 100%;
 }
-
 
 .double-input-row {
-    display: flex;
-    gap: 10px; /* Adds spacing between the inputs */
-    width: 100%;
+  display: flex;
+  gap: 10px; /* Adds spacing between the inputs */
+  width: 100%;
 }
 .double-input-row input {
-    width: 100%; /* Ensures the inputs take equal width */
-    flex: 1; /* Ensures the inputs share the available space equally */
+  width: 100%; /* Ensures the inputs take equal width */
+  flex: 1; /* Ensures the inputs share the available space equally */
 }
 
 .side-by-side {
-    margin-bottom: 0; /* Removes extra margin */
+  margin-bottom: 0; /* Removes extra margin */
 }
-
-
 
 /* Back button CSS */
 .back-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    text-decoration: none;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Adds spacing between the icon and text */
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  text-decoration: none;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Adds spacing between the icon and text */
 }
 
 .back-button:hover {
-    background-color: #45a049;
+  background-color: #45a049;
 }
 
 .material-icons {
-    font-size: 20px; /* Adjust icon size */
-    vertical-align: middle;
+  font-size: 20px; /* Adjust icon size */
+  vertical-align: middle;
 }
 
 /* 
 Notification code */
-#noty-holder{    
-    width: 100%;    
-    top: 0;
-    font-weight: bold;    
-    z-index: 1031; /* Max Z-Index in Fixed Nav Menu is 1030*/
-    text-align: center;
-    position: fixed;
+#noty-holder {
+  width: 100%;
+  top: 0;
+  font-weight: bold;
+  z-index: 1031; /* Max Z-Index in Fixed Nav Menu is 1030*/
+  text-align: center;
+  position: fixed;
 }
 
-.alert{
-    margin-bottom: 2px;
-    border-radius: 0px;
+.alert {
+  margin-bottom: 2px;
+  border-radius: 0px;
 }

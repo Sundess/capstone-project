@@ -19,11 +19,11 @@ def product_form_view(request):
             form = ProductForm()
 
             # Render the template with the success message and a new empty form
-            return render(request, 'product_form.html', {'form': form, 'success_message': success_message})
+            return render(request, 'pages/product_form.html', {'form': form, 'success_message': success_message})
         else:
             print("Form errors:", form.errors)  # Print form validation errors
-            return render(request, 'product_form.html', {'form': form})
+            return render(request, 'pages/product_form.html', {'form': form})
     else:
         form = ProductForm()
 
-    return render(request, 'product_form.html', {'form': form})
+    return render(request, 'pages/product_form.html', {'form': form})
