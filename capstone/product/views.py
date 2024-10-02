@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from .forms import ProductForm
-from .models import Product
+from .models import Product, File
 from django.contrib.auth.decorators import login_required
 from groq import Groq
 from dotenv import load_dotenv
+import pandas as pd
 import os
 
 # GROQ_API_KEY = os.getenv('GROQ_API_KEY ')
@@ -41,6 +42,19 @@ def product_detail_view(request, pk):
     summary_text = summarize_text(request, review_text)
     print(summary_text)
     return render(request, 'pages/product_detail.html', {'product': product, 'summary': summary_text})
+
+
+def create_db(file_path):
+    df = pd.read_csv(file_path, delimiter=',')
+    print(df.values)
+
+
+def upload_csv(request):
+    if request.method == "POST":
+        file = request.FILES['file']
+        obj = File.objects.create(file=file)
+        create_db(obj.file)
+    return render(request, 'pages/csv_input.html')
 
 
 review_text = """

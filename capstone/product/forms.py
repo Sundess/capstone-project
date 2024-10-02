@@ -5,15 +5,14 @@ from .models import Product
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['title', 'rating_count', 'avg_rating',
-                  'reviews_count', 'reviews', 'quantity']
+        fields = ['title', 'ref_id', 'brand', 'manufacture',
+                  'categories']  # Fields from the Product model
         widgets = {
-            'reviews': forms.Textarea(attrs={'rows': 12, 'cols': 50}),
-            'avg_rating': forms.NumberInput(attrs={'placeholder': 'Average Rating', 'step': '0.01'}),
-            'rating_count': forms.NumberInput(attrs={'placeholder': 'Rating Count'}),
-            'reviews_count': forms.NumberInput(attrs={'placeholder': 'Total Reviews'}),
-            'quantity': forms.NumberInput(attrs={'placeholder': 'Product Quantity'}),
             'title': forms.TextInput(attrs={'placeholder': 'Product Title'}),
+            'ref_id': forms.TextInput(attrs={'placeholder': 'Reference ID'}),
+            'brand': forms.TextInput(attrs={'placeholder': 'Brand'}),
+            'manufacture': forms.TextInput(attrs={'placeholder': 'Manufacture Date'}),
+            'categories': forms.SelectMultiple(attrs={'placeholder': 'Categories'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -23,6 +22,6 @@ class ProductForm(forms.ModelForm):
             kwargs['initial'] = {field: '' for field in self.Meta.fields}
 
         super(ProductForm, self).__init__(*args, **kwargs)
-        # # Make all fields required
+        # Make all fields required
         for field in self.fields:
             self.fields[field].required = True
