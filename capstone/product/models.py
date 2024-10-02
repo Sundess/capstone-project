@@ -17,5 +17,11 @@ class Product(models.Model):
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="products")
 
+    photo = models.ImageField(default='fallback.png',
+                              upload_to='photo/', blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.title

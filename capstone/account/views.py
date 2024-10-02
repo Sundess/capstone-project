@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from product.models import Product
 
 # Create your views here.
 
@@ -56,4 +57,5 @@ def logout_view(request):
 
 @login_required(login_url="login")
 def dashboard_view(request):
-    return render(request, 'pages/dashboard.html')
+    products = Product.objects.all()
+    return render(request, 'pages/dashboard.html', {'products': products})

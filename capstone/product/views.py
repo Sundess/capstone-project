@@ -1,6 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .forms import ProductForm
+from .models import Product
 from django.contrib.auth.decorators import login_required
+from groq import Groq
+from dotenv import load_dotenv
+import os
+
+# GROQ_API_KEY = os.getenv('GROQ_API_KEY ')
+load_dotenv()  # take environment variables from .env.
 
 
 @login_required(login_url="login")
@@ -27,3 +34,76 @@ def product_form_view(request):
         form = ProductForm()
 
     return render(request, 'pages/product_form.html', {'form': form})
+
+
+def product_detail_view(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    summary_text = summarize_text(request, review_text)
+    print(summary_text)
+    return render(request, 'pages/product_detail.html', {'product': product, 'summary': summary_text})
+
+
+review_text = """
+I chose this dress for our family photos. This dress is very flattering and comfortable. 
+It’s stretchy around the waist and arms. You don’t have to wear it off the shoulders. 
+I was worried about this due to my job and the way that I work my arms are raised all day. 
+I wear my sleeves on top of my shoulders. The skirt is very flowy and long enough to cover 
+everything so you do not feel concerned when bending over.
+
+The cost isn’t so bad for what you are getting. It has some sheerness to it but it’s still 
+thick enough that if you didn’t want to wear a bra underneath you don’t have to.
+
+I definitely think this has versatility. You can wear this to work or special events. 
+Loved this dress!! I used it for my senior pictures and it was perfect!! It was true to size 
+and held together well. It wasn’t super sheer that you would need extra undergarments. 
+Overall a good dress!! This dress is lightweight, great quality for the price, and is not see-through at all.
+
+I purchased this dress in three colors (apricot, brown, and khaki) as I wanted the perfect 
+neutral shade for our family photos. The colors in the photos online compared to what came 
+were a bit off, which is why I knocked this review down to 4 stars. The apricot color was 
+off-white and less yellow than expected. The brown was more reddish than I anticipated, 
+and the khaki was lighter than shown. Overall, the dress is great and worked perfectly, 
+but the colors were a bit off. The material of this dress is perfect for a summer day, 
+and the back is super cute. Would buy from this seller again.
+
+This is a cute dress, but I felt that it was a little too short for me. For curvy women, 
+the chest area is not flattering and lacks support. Above the knee length but not too short, I love this dress.
+"""
+
+
+def summarize_text(request, review_text):
+
+    client = Groq(
+        api_key=os.environ.get("GROQ_API_KEY"),
+
+    )
+    try:
+        completion = client.chat.completions.create(
+            model="llama3-8b-8192",
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a summarization specialization AI. "
+                        "I will provide you with reviews and their summaries. "
+                        "Create a short summary as shown in the example. The summary should "
+                        "highlight the good and bad aspects of the product, making it a short "
+                        "paragraph of no more than 4 sentences. Start the sentence with 'Customer says '"
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": f"Reviews: {review_text}"
+                }
+            ],
+            temperature=0.4,
+            max_tokens=90,
+            top_p=1,
+        )
+        summary = completion.choices[0].message.content
+        # print(completion.choices[0].message.content)
+
+        return summary
+        # return render(request, 'dashboard.html')
+    except Exception as e:
+        return f"Error generating summary: {str(e)}"

@@ -1,70 +1,36 @@
-{% extends 'main_layout.html' %} {% load static %} {%block style%}
-<link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
-{%endblock style%} {%block body %}
-
-<h1>Dashboard {{request.user.username}}</h1>
-<div class="product-display">
-  <div class="container">
-    <div class="card">
-      <div class="imgBx">
-        <img
-          src="https://media-ik.croma.com/prod/https://media.croma.com/image/upload/v1674045672/Croma%20Assets/Communication/Headphones%20and%20Earphones/Images/239033_0_aq6dfy.png?tr=w-600"
-          alt="nike-air-shoe"
-        />
-      </div>
-
-      <div class="contentBx">
-        <h2>
-          Jibra Buds Pro2 elite active 3d Lorem ipsum dolor sit, amet
-          consectetur adipisicing elit. Recusandae natus quis labore
-        </h2>
-
-        <div class="size">
-          <h3 class="m-0">Average Rating :</h3>
-          <span>4.5</span>
+{% extends "main_layout.html" %}
+{% load static %}
+{% block style %}
+  <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+{% endblock style %}
+{% block body %}
+  <h1>Dashboard {{ request.user.username }}</h1>
+  <div class="product-display">
+    {% for product in products %}
+      <div class="container">
+        <div class="card">
+          <div class="imgBx">
+            {% comment %} djlint:off {% endcomment %}
+            <img src="{{ product.photo.url }}" alt="{{ product.title }}" />
+          </div>
+          <div class="contentBx">
+            <h2>{{ product.title }}</h2>
+            <div class="size">
+              <h3 class="m-0">Average Rating :</h3>
+              <span>{{ product.avg_rating }}</span>
+            </div>
+            <div class="color">
+              <h3>Sentiment :</h3>
+              <span class="sentiment-percent">75%</span>&nbsp;
+              <span class="sentiment-percent">Happy</span>
+            </div>
+            <a href="{% url 'product-detail' product.pk %}">Learn More</a>
+          </div>
         </div>
-
-        <div class="color">
-          <h3>Sentiment :</h3>
-          <span class="sentiment-percent">75% </span>&nbsp;
-          <span class="sentiment-percent"> Happy</span>
-        </div>
-        <a href="#">Learn More</a>
       </div>
-    </div>
+    {% endfor %}
   </div>
-  <div class="container">
-    <div class="card">
-      <div class="imgBx">
-        <img
-          src="https://images.rawpixel.com/image_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcGYtczczLXBhaS0xNTgta2FuYXRlLTAxLW1vY2t1cF8xLmpwZw.jpg"
-          alt="nike-air-shoe"
-        />
-      </div>
-
-      <div class="contentBx">
-        <h2>Nike Shoes</h2>
-
-        <div class="size">
-          <h3>Size :</h3>
-          <span>7</span>
-          <span>8</span>
-          <span>9</span>
-          <span>10</span>
-        </div>
-
-        <div class="color">
-          <h3>Color :</h3>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <a href="#">See More</a>
-      </div>
-    </div>
-  </div>
-</div>
-<a href="{% url 'product_form' %}"> Product form </a>
-<br />
-<a href="{% url 'logout' %}"> Logout </a>
+  <a href="{% url 'product_form' %}">Product form</a>
+  <br />
+  <a href="{% url 'logout' %}">Logout</a>
 {% endblock body %}
