@@ -5,7 +5,7 @@ from django.db.models import Avg, Count, Sum
 
 class Product(models.Model):
     title = models.CharField(max_length=100)
-    ref_id = models.CharField(max_length=50, unique=True)
+    ref_id = models.CharField(max_length=50)
     brand = models.CharField(max_length=100)
     manufacture = models.CharField(max_length=100)
     categories = models.CharField(max_length=250)
@@ -35,6 +35,7 @@ class Product(models.Model):
         review summary, and recommendation count based on associated reviews.
         """
         reviews = self.reviews.all()  # Get all reviews associated with this product
+        print(reviews)
         self.reviews_count = reviews.count()
         self.avg_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 0
         self.rating_count = reviews.aggregate(Count('rating'))['rating__count']
