@@ -129,6 +129,11 @@ body {
   gap: 8px; /* Adds spacing between the icon and text */
 }
 
+/* .img-label {
+  font-weight: normal;
+  margin: 100px;
+} */
+
 .back-button:hover {
   background-color: #45a049;
 }
