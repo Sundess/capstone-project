@@ -7,6 +7,8 @@ from groq import Groq
 from dotenv import load_dotenv
 import pandas as pd
 import os
+from textblob import TextBlob
+
 
 # GROQ_API_KEY = os.getenv('GROQ_API_KEY ')
 load_dotenv()  # take environment variables from .env.
@@ -38,9 +40,40 @@ def product_form_view(request):
     return render(request, 'pages/product_form.html', {'form': form})
 
 
+# def product_detail_view(request, pk):
+#     product = get_object_or_404(Product.objects.prefetch_related('reviews'), pk=pk)
+#     reviews= product.reviews.all()
+#     # Perform sentiment analysis on each review
+#     for review in reviews:
+#         sentiment = TextBlob(review.text).sentiment.polarity
+#         if sentiment > 0:
+#             review.sentiment = "Positive"
+#         elif sentiment < 0:
+#             review.sentiment = "Negative"
+#         else:
+#             review.sentiment = "Neutral" 
+#     return render(request, 'pages/product_detail.html', {'product': product,'reviews':reviews})
+
 def product_detail_view(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    return render(request, 'pages/product_detail.html', {'product': product})
+    product = get_object_or_404(Product.objects.prefetch_related('reviews'), pk=pk)
+    reviews = product.reviews.all()
+
+    # Perform sentiment analysis based on both rating and review text
+    for review in reviews:
+        if review.rating < 3:
+            # If rating is less than 3, set sentiment as Negative
+            review.sentiment = "Negative"
+        else:
+            # Use TextBlob to analyze sentiment based on review text
+            sentiment = TextBlob(review.text).sentiment.polarity
+            if sentiment > 0:
+                review.sentiment = "Positive"
+            elif sentiment < 0:
+                review.sentiment = "Negative"
+            else:
+                review.sentiment = "Neutral"
+
+    return render(request, 'pages/product_detail.html', {'product': product, 'reviews': reviews})
 
 
 def create_db(file_path, username):
@@ -105,3 +138,29 @@ def upload_csv(request):
         create_db(obj.file, request.user)
 
     return render(request, 'pages/csv_input.html')
+
+
+
+
+
+
+def product_edit(request, pk):
+    # Fetch the product by its primary key (product_id)
+    product = get_object_or_404(Product, pk=pk)
+
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            # Save the product and update its details
+            product = form.save()
+            product.updated_by = request.user  # Optionally track the user who updated
+            product.save()
+
+            # Redirect to the product detail or list view after successful edit
+            return redirect('product_detail', pk=product.pk)  # Change this to the appropriate URL for your app
+    else:
+        # Prepopulate the form with the current product data
+        form = ProductForm(instance=product)
+
+    # Render the product form template with the form context
+    return render(request, 'pages/product_form.html', {'form': form})

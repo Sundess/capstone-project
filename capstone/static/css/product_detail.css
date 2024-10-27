@@ -1,0 +1,57 @@
+/* Styling the container with a thin border */
+.details-box {
+    border: 1px solid #ccc; /* Thin gray border */
+    padding: 20px; /* Padding inside the box */
+    border-radius: 10px; /* Rounded corners */
+    background-color: #fff; /* White background inside the box */
+    margin: 30px auto; /* Centering the box and adding top and bottom space */
+    max-width: 800px; /* Limiting the box width */
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05); /* Optional subtle shadow */
+  }
+  
+  /* Styling inside the box (optional adjustments to text styling) */
+  .details-box h1, .details-box h2, .details-box h3, .details-box p {
+    margin: 10px 0;
+  }
+  
+  .details-box h1 {
+    font-size: 2.2rem;
+    color: #007bff;
+  }
+  
+  .details-box h2 {
+    font-size: 1.8rem;
+    color: #343a40;
+  }
+  
+  .details-box h3 {
+    font-size: 1rem;
+    color: #5aa6e8;
+  }
+  
+  .details-box p {
+    font-size: 1.125rem;
+    color: #555;
+    line-height: 1.6;
+  }
+  
+
+  
+  span {
+    font-weight: normal; /* Ensure the right side text remains normal */
+    color: #555; /* Optional: add a subtle color difference */
+    line-height: 1.6;
+
+  }
+
+  .chart-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .chart-container h2 {
+    margin-bottom: 20px;
+  }
+  
+ 
+  

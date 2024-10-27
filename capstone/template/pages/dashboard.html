@@ -4,7 +4,7 @@
   <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
 {% endblock style %}
 {% block body %}
-  <h1>Dashboard {{ request.user.username }}</h1>
+  <h1>Product Dashboard {{ request.user.username }}</h1>
   <div class="product-display">
     {% for product in products %}
       <div class="container">
@@ -16,13 +16,13 @@
           <div class="contentBx">
             <h2>{{ product.title }}</h2>
             <div class="size">
-              <h3 class="m-0">Average Rating :</h3>
+              <h3 class="m-0">Average Rating: </h3>
               <span>{{ product.avg_rating }}</span>
             </div>
             <div class="color">
               <h3>Sentiment :</h3>
-              <span class="sentiment-percent">75%</span>&nbsp;
-              <span class="sentiment-percent">Happy</span>
+              <!-- <span class="sentiment-percent">75%</span>&nbsp;
+              <span class="sentiment-percent">Happy</span> -->
             </div>
             <a href="{% url 'product-detail' product.pk %}">Learn More</a>
           </div>
