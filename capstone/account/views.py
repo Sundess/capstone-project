@@ -58,4 +58,5 @@ def logout_view(request):
 @login_required(login_url="login")
 def dashboard_view(request):
     products = Product.objects.all()
+    print(products)
     return render(request, 'pages/dashboard.html', {'products': products})
