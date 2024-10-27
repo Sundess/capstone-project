@@ -1,91 +1,113 @@
-{% extends "main_layout.html" %}
-{% load static %}
-{% block style %}
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"
-        rel="stylesheet"
-        id="bootstrap-css" />
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-  <link rel="stylesheet" href="{% static 'css/product_form.css' %}" />
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-        rel="stylesheet" />
-{% endblock style %}
-{% block body %}
-  <!-- Message Block for Displaying Feedback -->
-  <div id="noty-holder">
-    {% if success_message %}
-      <script>
+{% extends "main_layout.html" %} {% load static %} {% block style %}
+<link
+  href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"
+  rel="stylesheet"
+  id="bootstrap-css"
+/>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link rel="stylesheet" href="{% static 'css/product_form.css' %}" />
+<link
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  rel="stylesheet"
+/>
+{% endblock style %} {% block body %}
+<!-- Message Block for Displaying Feedback -->
+<div id="noty-holder">
+  {% if success_message %}
+  <script>
     $(document).ready(function () {
       var successMessage = "{{ success_message|escapejs }}";
       createNoty(successMessage, "success");
     });
-      </script>
-    {% endif %}
+  </script>
+  {% endif %}
+</div>
+<br />
+{% comment %} Back Button {% endcomment %}
+<a href="{% url 'dashboard' %}" class="back-button">
+  <span class="material-icons">arrow_back</span> Back
+</a>
+<div class="container" id="container">
+  <!-- Product Form -->
+  <div class="form-container sign-in">
+    <form method="post" action="">
+      {% csrf_token %}
+      <h1>Product Form</h1>
+      <span>Add a new product.</span>
+      <!-- Title Input -->
+      <input
+        type="text"
+        placeholder="Product Title"
+        name="title"
+        value="{{ form.title.value|default:'' }}"
+        required
+      />
+      <!-- Rating Count and Average Rating Side by Side Inputs -->
+      <div class="double-input-row">
+        <input
+          type="number"
+          placeholder="Rating Count"
+          name="rating_count"
+          value="{{ form.rating_count.value|default:'' }}"
+          required
+        />
+        <input
+          type="number"
+          placeholder="Average Rating"
+          name="avg_rating"
+          step="0.01"
+          min="0"
+          max="5"
+          value="{{ form.avg_rating.value|default:'' }}"
+          required
+        />
+      </div>
+      <!-- Reviews Count and Quantity Side by Side Inputs -->
+      <div class="double-input-row">
+        <input
+          type="number"
+          placeholder="Total Reviews"
+          name="reviews_count"
+          value="{{ form.reviews_count.value|default:'' }}"
+          required
+        />
+        <input
+          type="number"
+          placeholder="Product Quantity"
+          name="quantity"
+          value="{{ form.quantity.value|default:'' }}"
+          required
+        />
+      </div>
+      <!-- Product Url -->
+      <label for="imageInput" class="img-label" id="fileLabel"
+        >Choose an image</label
+      >
+      <input
+        type="file"
+        placeholder="Upload Image or Drag Tt Here"
+        name="url"
+        id="imageInput"
+        value="{{ form.url.value|default:'' }}"
+        required
+      />
+      <!-- Reviews Textarea -->
+      <textarea
+        id="w3review"
+        name="reviews"
+        rows="12"
+        cols="50"
+        placeholder="Reviews From the Users"
+        value="{{ form.reviews.value|default:'' }}"
+        required
+      ></textarea>
+      <button type="submit">Add Product</button>
+      <br />
+    </form>
   </div>
-  <br />
-  {% comment %} Back Button {% endcomment %}
-  <a href="{% url 'dashboard' %}" class="back-button">
-    <span class="material-icons">arrow_back</span> Back
-  </a>
-  <div class="container" id="container">
-    <!-- Product Form -->
-    <div class="form-container sign-in">
-      <form method="post" action="">
-        {% csrf_token %}
-        <h1>Product Form</h1>
-        <span>Add a new product.</span>
-        <!-- Title Input -->
-        <input type="text"
-               placeholder="Product Title"
-               name="title"
-               value="{{ form.title.value|default:'' }}"
-               required />
-        <!-- Rating Count and Average Rating Side by Side Inputs -->
-        <div class="double-input-row">
-          <input type="number"
-                 placeholder="Rating Count"
-                 name="rating_count"
-                 value="{{ form.rating_count.value|default:'' }}"
-                 required />
-          <input type="number"
-                 placeholder="Average Rating"
-                 name="avg_rating"
-                 step="0.01"
-                 min="0"
-                 max="5"
-                 value="{{ form.avg_rating.value|default:'' }}"
-                 required />
-        </div>
-        <!-- Reviews Count and Quantity Side by Side Inputs -->
-        <div class="double-input-row">
-          <input type="number"
-                 placeholder="Total Reviews"
-                 name="reviews_count"
-                 value="{{ form.reviews_count.value|default:'' }}"
-                 required />
-          <input type="number"
-                 placeholder="Product Quantity"
-                 name="quantity"
-                 value="{{ form.quantity.value|default:'' }}"
-                 required />
-        </div>
-        <!-- Product Url -->
-        <label for="imageInput" class="img-label" id="fileLabel">Choose an image</label>
-        <input type="file"
-               placeholder="Upload Image or Drag Tt Here"
-               name="url"
-               id="imageInput"
-               value="{{ form.url.value|default:'' }}"
-               required />
-        <!-- Reviews Textarea -->
-        <textarea id="w3review" name="reviews" rows="12" cols="50" placeholder="Reviews From the Users" value="{{ form.reviews.value|default:'' }}" required>
-</textarea>
-        <button type="submit">Add Product</button>
-        <br />
-      </form>
-    </div>
-  </div>
-  <script>
+</div>
+<script>
   function createNoty(message, type) {
     var html =
       '<div class="alert alert-' + type + ' alert-dismissable page-alert">';
@@ -102,5 +124,5 @@
       $(this).closest(".page-alert").slideUp();
     });
   });
-  </script>
+</script>
 {% endblock body %}
