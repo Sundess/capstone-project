@@ -10,24 +10,31 @@ h2 {
   margin: 0;
 }
 
-body {
-  margin: 12px;
-  min-height: 100vh;
+h1{
+  text-align: center;
 }
 
+/* body {
+  margin: 12px;
+  min-height: 100vh;
+} */
+
 .product-display {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 330px);
-  gap: 12px;
-  /* align-items: center; */
-  /* justify-content: left; */
+  display: flex; /* Change to flex layout */
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
+  justify-content: space-evenly; /* Distributes space between items */
+  gap: 80px; /* Space between items */
+  margin-bottom: 0 px; /* Center the display */
+  padding: 65px; /* Optional: Remove padding */
 }
 
 .container {
-  position: relative;
-  margin: 8px;
-  text-overflow: ellipsis;
+   /* Make three products per row with gap adjustment */
+  margin-bottom: 40px; /* Maintain the margin around each product */
+  text-overflow: ellipsis; /* Handle overflow text */
+  padding: 0px; /* Optional: Remove padding to adjust space */
 }
+
 
 .container .card .contentBx {
   h2 {
