@@ -1,10 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap"); */
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Source Sans Pro', sans-serif;
+
 }
 
 body {
@@ -48,17 +49,15 @@ body {
 }
 
 .container button {
-  background-color: #512da8;
-  color: #fff;
-  font-size: 12px;
-  padding: 10px 45px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  margin-top: 10px;
-  cursor: pointer;
+  border-radius: 50px;
+    background-color: #B6C370;
+    color: white;
+    font-weight: bold;
+    width: 150px;
+    border: none;
+    padding: 10px 20px;
+    margin: 0;
+    cursor: pointer;
 }
 
 .container form {
@@ -114,19 +113,28 @@ body {
 
 /* Back button CSS */
 .back-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  text-decoration: none;
-  font-size: 16px;
-  background-color: #4caf50;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-  display: flex;
-  align-items: center;
-  gap: 8px; /* Adds spacing between the icon and text */
+  
+  
+    border-radius: 50px;
+      background-color: #B6C370;
+      color: white;
+      font-weight: bold;
+      width: 150px;
+      border: none;
+      padding: 10px 20px;
+      margin: 0;
+      cursor: pointer;
+
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Adds spacing between the icon and text */
 }
 
 /* .img-label {
@@ -136,6 +144,7 @@ body {
 
 .back-button:hover {
   background-color: #45a049;
+  text-decoration: none;
 }
 
 .material-icons {

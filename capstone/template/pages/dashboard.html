@@ -4,7 +4,7 @@
   <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
 {% endblock style %}
 {% block body %}
-  <h1>Product Dashboard {{ request.user.username }}</h1>
+  <h1> {{ request.user.username }} Product Dashboard</h1>
   <div class="product-display">
     {% for product in products %}
       <div class="container">
@@ -30,7 +30,7 @@
       </div>
     {% endfor %}
   </div>
-  <a href="{% url 'product_form' %}">Product form</a>
+  <!-- <a href="{% url 'product_form' %}">Product form</a> -->
   <br />
   <a href="{% url 'logout' %}">Logout</a>
 {% endblock body %}
