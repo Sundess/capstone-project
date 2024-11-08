@@ -10,6 +10,8 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet" />
 {% endblock style %}
+{% block navbar %}
+{% endblock navbar %}
 {% block body %}
   <!-- Message Block for Displaying Feedback -->
   <div id="noty-holder">
@@ -30,7 +32,7 @@
   <div class="container" id="container">
     <!-- Product Form -->
     <div class="form-container sign-in">
-      <form method="POST" action="">
+      <form method="post" action="">
         {% csrf_token %}
         <h1>Product Form</h1>
         <span>Add a new product.</span>
@@ -78,8 +80,13 @@
                value="{{ form.url.value|default:'' }}"
                required />
         <!-- Reviews Textarea -->
-        <textarea id="w3review" name="reviews" rows="12" cols="50" placeholder="Reviews From the Users" value="{{ form.reviews.value|default:'' }}" required>
-</textarea>
+        <textarea id="w3review"
+                  name="reviews"
+                  rows="12"
+                  cols="50"
+                  placeholder="Reviews From the Users"
+                  value="{{ form.reviews.value|default:'' }}"
+                  required></textarea>
         <button type="submit">Add Product</button>
         <br />
       </form>

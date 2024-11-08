@@ -116,7 +116,7 @@ class Review(models.Model):
     do_recommend = models.BooleanField()
     review_id = models.PositiveIntegerField()
     rating = models.PositiveIntegerField()
-    source_url = models.URLField()
+    # source_url = models.URLField()
     text = models.TextField()
     title = models.CharField(max_length=200)
     username = models.CharField(max_length=100)
