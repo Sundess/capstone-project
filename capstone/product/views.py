@@ -6,6 +6,11 @@ from django.contrib.auth.decorators import login_required
 from groq import Groq
 from dotenv import load_dotenv
 import pandas as pd
+from collections import Counter
+from collections import Counter
+from textblob import TextBlob
+from django.shortcuts import render, get_object_or_404
+
 import os
 from textblob import TextBlob
 
@@ -40,20 +45,6 @@ def product_form_view(request):
     return render(request, 'pages/product_form.html', {'form': form})
 
 
-# def product_detail_view(request, pk):
-#     product = get_object_or_404(Product.objects.prefetch_related('reviews'), pk=pk)
-#     reviews= product.reviews.all()
-#     # Perform sentiment analysis on each review
-#     for review in reviews:
-#         sentiment = TextBlob(review.text).sentiment.polarity
-#         if sentiment > 0:
-#             review.sentiment = "Positive"
-#         elif sentiment < 0:
-#             review.sentiment = "Negative"
-#         else:
-#             review.sentiment = "Neutral"
-#     return render(request, 'pages/product_detail.html', {'product': product,'reviews':reviews})
-
 def product_detail_view(request, pk):
     product = get_object_or_404(
         Product.objects.prefetch_related('reviews'), pk=pk)
@@ -66,10 +57,10 @@ def product_detail_view(request, pk):
             review.sentiment = "Negative"
         else:
             # Use TextBlob to analyze sentiment based on review text
-            sentiment = TextBlob(review.text).sentiment.polarity
-            if sentiment > 0:
+            sentiment = TextBlob(review.title).sentiment.polarity
+            if sentiment > 0.1:
                 review.sentiment = "Positive"
-            elif sentiment < 0:
+            elif sentiment < -0.1:
                 review.sentiment = "Negative"
             else:
                 review.sentiment = "Neutral"
@@ -167,3 +158,46 @@ def product_edit(request, pk):
 
     # Render the product form template with the form context
     return render(request, 'pages/product_form.html', {'form': form})
+
+
+def product_detail_view(request, pk):
+    product = get_object_or_404(
+        Product.objects.prefetch_related('reviews'), pk=pk)
+    reviews = product.reviews.all()
+
+    # Set sentiment for each review
+    for review in reviews:
+        if review.rating < 3:
+            review.sentiment = "Negative"
+        else:
+            sentiment = TextBlob(review.title).sentiment.polarity
+            if sentiment > 0.1:
+                review.sentiment = "Positive"
+            elif sentiment < -0.1:
+                review.sentiment = "Negative"
+            else:
+                review.sentiment = "Neutral"
+
+    # Count the sentiment types
+    sentiment_counts = Counter(review.sentiment for review in reviews)
+    total_reviews = len(reviews)
+
+    # Calculate percentages if there are reviews
+    if total_reviews > 0:
+        positive_percentage = (sentiment_counts.get(
+            'Positive', 0) / total_reviews) * 100
+        negative_percentage = (sentiment_counts.get(
+            'Negative', 0) / total_reviews) * 100
+        neutral_percentage = (sentiment_counts.get(
+            'Neutral', 0) / total_reviews) * 100
+    else:
+        positive_percentage = negative_percentage = neutral_percentage = 0
+
+    context = {
+        'product': product,
+        'reviews': reviews,
+        'positive_percentage': positive_percentage,
+        'negative_percentage': negative_percentage,
+        'neutral_percentage': neutral_percentage
+    }
+    return render(request, 'pages/product_detail.html', context)
