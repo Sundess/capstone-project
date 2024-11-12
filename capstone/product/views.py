@@ -7,9 +7,9 @@ from groq import Groq
 from dotenv import load_dotenv
 import pandas as pd
 from collections import Counter
-from collections import Counter
 from textblob import TextBlob
-from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
 
 import os
 from textblob import TextBlob
@@ -163,41 +163,52 @@ def product_edit(request, pk):
 def product_detail_view(request, pk):
     product = get_object_or_404(
         Product.objects.prefetch_related('reviews'), pk=pk)
-    reviews = product.reviews.all()
+    # Order reviews by review date descending
+    reviews = product.reviews.all().order_by('-review_date')
 
-    # Set sentiment for each review
+    # Perform sentiment analysis on reviews
     for review in reviews:
         if review.rating < 3:
             review.sentiment = "Negative"
         else:
-            sentiment = TextBlob(review.title).sentiment.polarity
-            if sentiment > 0.1:
-                review.sentiment = "Positive"
-            elif sentiment < -0.1:
-                review.sentiment = "Negative"
-            else:
-                review.sentiment = "Neutral"
+            sentiment_polarity = TextBlob(review.title).sentiment.polarity
+            review.sentiment = (
+                "Positive" if sentiment_polarity > 0.1 else
+                "Negative" if sentiment_polarity < -0.1 else
+                "Neutral"
+            )
 
-    # Count the sentiment types
+    # Calculate sentiment type counts
     sentiment_counts = Counter(review.sentiment for review in reviews)
     total_reviews = len(reviews)
 
-    # Calculate percentages if there are reviews
+    # Calculate sentiment percentages
     if total_reviews > 0:
-        positive_percentage = (sentiment_counts.get(
-            'Positive', 0) / total_reviews) * 100
-        negative_percentage = (sentiment_counts.get(
-            'Negative', 0) / total_reviews) * 100
-        neutral_percentage = (sentiment_counts.get(
-            'Neutral', 0) / total_reviews) * 100
+        positive_percentage = (
+            sentiment_counts['Positive'] / total_reviews) * 100
+        negative_percentage = (
+            sentiment_counts['Negative'] / total_reviews) * 100
+        neutral_percentage = (
+            sentiment_counts['Neutral'] / total_reviews) * 100
     else:
         positive_percentage = negative_percentage = neutral_percentage = 0
 
+    # Paginate reviews (5 reviews per page)
+    paginator = Paginator(reviews, 5)
+    page = request.GET.get('page')
+
+    try:
+        paginated_reviews = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_reviews = paginator.page(1)
+    except EmptyPage:
+        paginated_reviews = paginator.page(paginator.num_pages)
+
     context = {
         'product': product,
-        'reviews': reviews,
+        'reviews': paginated_reviews,
         'positive_percentage': positive_percentage,
         'negative_percentage': negative_percentage,
-        'neutral_percentage': neutral_percentage
+        'neutral_percentage': neutral_percentage,
     }
     return render(request, 'pages/product_detail.html', context)
