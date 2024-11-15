@@ -20,6 +20,13 @@ class Product(models.Model):
     review_summary = models.CharField(max_length=250, null=True, blank=True)
     do_recommend_count = models.PositiveIntegerField(default=0)
 
+    # Fields to store the count of reviews by rating
+    one_star_count = models.PositiveIntegerField(default=0)
+    two_star_count = models.PositiveIntegerField(default=0)
+    three_star_count = models.PositiveIntegerField(default=0)
+    four_star_count = models.PositiveIntegerField(default=0)
+    five_star_count = models.PositiveIntegerField(default=0)
+
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="products")
 
@@ -43,6 +50,13 @@ class Product(models.Model):
         self.avg_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 0
         self.rating_count = reviews.aggregate(Count('rating'))['rating__count']
         self.do_recommend_count = reviews.filter(do_recommend=True).count()
+
+        # Calculate counts for each star rating
+        self.one_star_count = reviews.filter(rating=1).count()
+        self.two_star_count = reviews.filter(rating=2).count()
+        self.three_star_count = reviews.filter(rating=3).count()
+        self.four_star_count = reviews.filter(rating=4).count()
+        self.five_star_count = reviews.filter(rating=5).count()
 
         # Generate a review summary if needed (for now using the first review text)
         if reviews.exists():

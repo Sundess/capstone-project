@@ -57,7 +57,7 @@ def product_detail_view(request, pk):
             review.sentiment = "Negative"
         else:
             # Use TextBlob to analyze sentiment based on review text
-            sentiment = TextBlob(review.title).sentiment.polarity
+            sentiment = TextBlob(review.text).sentiment.polarity
             if sentiment > 0.1:
                 review.sentiment = "Positive"
             elif sentiment < -0.1:
