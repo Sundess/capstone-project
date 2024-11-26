@@ -1,40 +1,41 @@
-# import json
-# # Import the models from the 'product' app
-# from product.models import Product, Review
+import os
+import json
+from product.models import Product
 
 
-# def export_data_to_json():
-#     """Export Product and Review data to a JSON file."""
-#     products = Product.objects.prefetch_related(
-#         'reviews').all()  # Ensure 'reviews' is the related_name in Product
-#     data = []
+def export_data_to_json(file_path='product_reviews.json'):
+    # Check if the file already exists
+    if not os.path.exists(file_path):
+        print(f"{file_path} does not exist. Creating the file...")
 
-#     for product in products:
-#         product_data = {
-#             "product_id": product.id,
-#             "title": product.title,
-#             "brand": product.brand,
-#             "avg_rating": float(product.avg_rating),
-#             "reviews_count": product.reviews_count,
-#             "review_summary": product.review_summary,
-#             "reviews": [
-#                 {
-#                     "review_id": review.id,
-#                     "text": review.text,
-#                     "rating": review.rating,
-#                     "username": review.username,
-#                     "did_purchase": review.did_purchase,
-#                     "do_recommend": review.do_recommend,
-#                 }
-#                 # Ensure 'reviews' is the related_name in Review's ForeignKey
-#                 for review in product.reviews.all()
-#             ],
-#         }
-#         data.append(product_data)
+        # Query the database for all products and their reviews
+        products = Product.objects.prefetch_related('reviews').all()
 
-#     # Save data to a JSON file
-#     file_path = 'product_reviews.json'
-#     with open(file_path, 'w') as json_file:
-#         json.dump(data, json_file, indent=4)
+        data = []
+        for product in products:
+            product_data = {
+                "product_id": product.id,
+                "title": product.title,
+                "brand": product.brand,
+                "avg_rating": float(product.avg_rating),
+                "reviews_count": product.reviews_count,
+                "review_summary": product.review_summary,
+                "reviews": [
+                    {"review_id": review.id,
+                     # Limiting review text to first 150 characters
+                     "text": review.text[:150],
+                     "rating": review.rating}
+                    for review in product.reviews.all()
+                ],
+            }
+            data.append(product_data)
 
-#     print(f"Data successfully exported to {file_path}")
+        # Create and write to the JSON file
+        try:
+            with open(file_path, 'w') as json_file:
+                json.dump(data, json_file, indent=4)
+            print(f"Data successfully exported to {file_path}")
+        except Exception as e:
+            print(f"Error writing to file: {e}")
+    else:
+        print(f"{file_path} already exists.")

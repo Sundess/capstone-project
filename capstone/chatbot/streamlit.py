@@ -7,7 +7,6 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import create_retrieval_chain
 from langchain_community.vectorstores import FAISS
-from langchain_community.document_loaders import PyPDFDirectoryLoader
 # Use JSONDirectoryLoader here
 from langchain_community.document_loaders import JSONLoader
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
@@ -24,7 +23,16 @@ load_dotenv()
 groq_api_key = os.getenv('GROQ_API_KEY')
 os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
 
-st.title("Gemma Model Document Q&A")
+# Define the target URL
+target_url = "http://127.0.0.1:8000/"  # Replace with your desired URL
+
+# Create a button
+if st.button("Go Back"):
+    # Display the link as a clickable HTML element
+    st.markdown(f"[Click here to proceed to the URL]({target_url})")
+
+st.title("Database Model Document Q&A")
+
 
 llm = ChatGroq(groq_api_key=groq_api_key,
                model_name="Llama3-8b-8192")
@@ -43,39 +51,6 @@ Questions:{input}
 
 jq_query = ".[]"
 
-
-# def vector_embedding():
-#     if "vectors" not in st.session_state:
-#         # Step 1: Get review data from the database
-#         st.session_state.loader = JSONLoader(
-#             "../product_reviews.json", jq_schema=jq_query)
-
-#         # products = Product.objects.all()  # Get all products
-#         # review_texts = []
-
-#         # for product in products:
-#         #     # Get reviews for each product
-#         #     reviews = Review.objects.filter(product=product)
-#         #     for review in reviews:
-#         #         review_texts.append(review.text)
-#         # review_texts = rag_chat.product_text()
-
-#         # Step 2: Split reviews into chunks
-#         st.session_state.embeddings = GoogleGenerativeAIEmbeddings(
-#             model="models/embedding-001")
-
-#         st.session_state.text_splitter = RecursiveCharacterTextSplitter(
-#             chunk_size=1000, chunk_overlap=200)  # Chunk Creation
-
-#         # Split the reviews into chunks for processing
-#         st.session_state.text_splitter.split_documents(
-#             st.session_state.docs[:20])  # splitting
-#         # st.session_state.final_documents = st.session_state.text_splitter.split_documents(
-#         #     review_texts[:20])  # Limit to 20 reviews
-
-#         # Step 3: Create the vector store from documents
-#         st.session_state.vectors = FAISS.from_documents(
-#             st.session_state.final_documents, st.session_state.embeddings)
 
 def vector_embedding():
     if "vectors" not in st.session_state:

@@ -1,43 +1,37 @@
+import os
 import subprocess
-from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-
-
-# Create your views here.
-
-# from django.http import JsonResponse
-# from .rag_chat import load_json_to_documents, chat_with_rag
-
-
-# def chat_endpoint(request):
-#     if request.method == "POST":
-#         query = request.POST.get("query", "List of product")
-#         if not query:
-#             return JsonResponse({"error": "Query cannot be empty."}, status=400)
-
-#         # Load JSON data and documents
-#         documents = load_json_to_documents('product_reviews.json')
-
-#         # Get response from RAG
-#         answer = chat_with_rag(query, documents)
-#         return render(request, 'pages/chatpage.html', {"answer": answer})
-
-#     return render(request, 'pages/chatpage.html')
+from .models import export_data_to_json
 
 
 def streamlit_view(request):
-    # Path to your Streamlit script
-    streamlit_script_path = 'streamlit.py'
 
-    # Run Streamlit as a subprocess
-    subprocess.Popen(['streamlit', 'run', streamlit_script_path])
+    export_data_to_json()
 
-    return HttpResponse("Streamlit app is running!")
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    streamlit_script_path = os.path.join(base_dir, 'chatbot', 'streamlit.py')
 
+    if not os.path.exists(streamlit_script_path):
+        return HttpResponse("Error: Streamlit script not found at the specified path.")
 
-# def streamlit_view(request):
-#     # URL of the Streamlit app
-#     streamlit_url = 'http://127.0.0.1:8501'  # or the deployed Streamlit URL
+    # Use a custom port to avoid conflicts
+    streamlit_port = 8502
+    streamlit_url = f'http://localhost:{streamlit_port}/'
 
-#     # Redirect to Streamlit app
-#     return HttpResponseRedirect(streamlit_url)
+    try:
+        process = subprocess.Popen(
+            ['streamlit', 'run', streamlit_script_path,
+                '--server.port', str(streamlit_port)],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        stdout, stderr = process.communicate(timeout=5)
+        print(f"Streamlit script path: {streamlit_script_path}")
+        print(f"STDOUT: {stdout.decode()}")
+        print(f"STDERR: {stderr.decode()}")
+    except subprocess.SubprocessError as e:
+        print(f"Subprocess error: {e}")
+    except Exception as e:
+        print(f"General error: {e}")
+
+    return HttpResponseRedirect(streamlit_url)
