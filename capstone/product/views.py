@@ -5,7 +5,6 @@ from .models import Product, File, Review
 from django.contrib.auth.decorators import login_required
 from groq import Groq
 from dotenv import load_dotenv
-from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import io
 import base64
@@ -54,7 +53,6 @@ def product_form_view(request):
         form = ProductForm()
 
     return render(request, 'pages/product_form.html', {'form': form})
-
 
 
 # def product_detail_view(request, pk):
@@ -239,9 +237,8 @@ def product_detail_view(request, pk):
     # Calculate sentiment type counts
     sentiment_counts = Counter(review.sentiment for review in reviews)
     total_reviews = len(reviews)
-    
-    
-            # sentiment_counts['Positive'] / total_reviews) * 100
+
+    # sentiment_counts['Positive'] / total_reviews) * 100
 
 # Calculate sentiment percentages
     if total_reviews > 0:
