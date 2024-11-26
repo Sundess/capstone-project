@@ -4,7 +4,7 @@
   <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
 {% endblock style %}
 {% block body %}
-  <h1>{{ request.user.username }} Product Dashboard</h1>
+  <h1>Product Dashboard</h1>
   <div class="product-display">
     {% for product in products %}
       <div class="container">
