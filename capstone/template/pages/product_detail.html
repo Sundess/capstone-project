@@ -13,6 +13,12 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'css/product_detail.css' %}" />
+  <script src="https://cdn.jsdelivr.net/npm/wordcloud"></script>
+
+
+  
+
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock style %}
 {% block body %}
@@ -59,6 +65,75 @@
       </div>
     </div>
   </div>
+
+  {% comment %} rating code {% endcomment %}
+
+  <div class="ratingscount">
+    <div class="rating-container">
+      <div class="overall-rating">{{product.avg_rating}}/5</div>
+      <div class="star-rating">
+        <i class="fa fa-star"></i>
+        <i class="fa fa-star"></i>
+        <i class="fa fa-star"></i>
+        <i class="fa fa-star-half-o"></i>
+        <i class="fa fa-star-o"></i>
+      </div>
+  
+      <!-- Rating Distribution -->
+      <div class="rating-distribution">
+        <!-- 5-star rating bar -->
+        <div class="rating-bar-container">
+          <div class="star-container" data-stars="5">5 Star</div>
+          <div class="rating-bar">
+            <div class="rating-bar-fill" style="width: 0%;"></div>
+          </div>
+          <span class="rating-count">{{product.five_star_count}}</span>
+        </div>
+  
+        <!-- 4-star rating bar -->
+        <div class="rating-bar-container">
+          <div class="star-container" data-stars="4">4 Star</div>
+          <div class="rating-bar">
+            <div class="rating-bar-fill" style="width: 0%;"></div>
+          </div>
+          <span class="rating-count">{{product.four_star_count}}</span>
+        </div>
+  
+        <!-- 3-star rating bar -->
+        <div class="rating-bar-container">
+          <div class="star-container" data-stars="3">3 Star</div>
+          <div class="rating-bar">
+            <div class="rating-bar-fill" style="width: 0%;"></div>
+          </div>
+          <span class="rating-count">{{product.three_star_count}}</span>
+        </div>
+  
+        <!-- 2-star rating bar -->
+        <div class="rating-bar-container">
+          <div class="star-container" data-stars="2">2 Star</div>
+          <div class="rating-bar">
+            <div class="rating-bar-fill" style="width: 0%;"></div>
+          </div>
+          <span class="rating-count">{{product.two_star_count}}</span>
+        </div>
+  
+        <!-- 1-star rating bar -->
+        <div class="rating-bar-container">
+          <div class="star-container" data-stars="1">1 Star</div>
+          <div class="rating-bar">
+            <div class="rating-bar-fill" style="width: 0%;"></div>
+          </div>
+          <span class="rating-count">{{product.one_star_count}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  {% comment %} rating code finish {% endcomment %}
+  
+  
+
   <div class="reviews-box">
     <h3>Reviews</h3>
     {% if reviews %}
@@ -127,22 +202,20 @@
   const ratingsBarChart = new Chart(ctxBar, {
     type: 'bar',
     data: {
-      labels: ['Total Ratings', 'Average Ratings', 'Total Reviews'],
+      labels: ['Total Ratings','Total Reviews'],
       datasets: [{
-        label: 'Ratings Data',
+        label: 'Total Number',
         data: [
           {{ product.rating_count }},
-          {{ product.avg_rating }},
           {{ product.reviews_count }}
         ],
         backgroundColor: [
           'rgba(75, 192, 192, 0.5)',
-          'rgba(153, 102, 255, 0.5)',
+      
           'rgba(255, 205, 86, 0.5)'
         ],
         borderColor: [
           'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
           'rgba(255, 205, 86, 1)'
         ],
         borderWidth: 1
@@ -202,7 +275,36 @@
   });
 
   
-  </script>
+  // Assuming you have the product data in a JavaScript object
+const product = {
+  one_star_count: {{product.one_star_count}},
+  two_star_count: {{product.two_star_count}},
+  three_star_count: {{product.three_star_count}},
+  four_star_count: {{product.four_star_count}},
+  five_star_count: {{product.five_star_count}}
+};
+
+// Calculate the total number of ratings
+const totalRatings = product.one_star_count + product.two_star_count + product.three_star_count + product.four_star_count + product.five_star_count;
+
+// Function to calculate and set the width of a bar
+function setBarWidth(barElement, count) {
+  const percentage = (count / totalRatings) * 100;
+  barElement.style.width = percentage + '%';
+}
+
+// Set the width of each bar dynamically
+const ratingBars = document.querySelectorAll('.rating-bar-fill');
+setBarWidth(ratingBars[0], product.five_star_count);
+setBarWidth(ratingBars[1], product.four_star_count);
+setBarWidth(ratingBars[2], product.three_star_count);
+setBarWidth(ratingBars[3], product.two_star_count);
+setBarWidth(ratingBars[4], product.one_star_count);
+
+
+
+
+</script>
   <style>
     .detail-box {
       border: 1px solid #ccc;
@@ -309,6 +411,7 @@
     line-height: 1.6;
   }
   
+  
 
   
   span {
@@ -374,7 +477,77 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
 
-  
+  .ratingscount{
+    border: 1px solid #ccc; /* Thin gray border */
+    padding: 20px; /* Padding inside the box */
+    border-radius: 10px; /* Rounded corners */
+    background-color: #fff; /* White background inside the box */
+    margin-left: 70px; /* Centering the box and adding top and bottom space */
+    margin-bottom:30px;
+    max-width: 90%; 
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05); /* Optional subtle shadow */
+    
 
+  }
+
+
+  .rating-container {
+    margin: 20px;
+    
+  }
+  
+  .overall-rating {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .star-rating i {
+    font-size: 20px;
+    color: #ffcc00; /* Gold color for stars */
+    margin-right: 3px;
+  }
+  
+  .rating-distribution {
+    margin-top: 20px;
+  }
+  
+  .rating-bar-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .star-container {
+    display: flex;
+    margin-right: 10px;
+    width: 100px; /* Adjust width to align with the bars */
+  }
+  
+  .star-container i {
+    color: #ccc; /* Silver color for stars */
+    font-size: 18px;
+    margin-right: 2px;
+  }
+  
+  .rating-bar {
+    height: 20px;
+    background-color: #eee;
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  .rating-bar-fill {
+    height: 100%;
+    background-color: #ffcc00; /* Gold color for bars */
+  }
+  
+  .rating-count {
+    min-width: 30px;
+    text-align: right;
+    font-size: 16px;
+    color: #333;
+  }
+  
   </style>
 {% endblock body %}
