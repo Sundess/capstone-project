@@ -17,6 +17,9 @@ import pandas as pd
 from collections import Counter
 from textblob import TextBlob
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+import csv
+from io import TextIOWrapper
+from django.contrib import messages
 
 
 import os
@@ -137,11 +140,57 @@ def create_db(file_path, username):
         print(f"Updated review stats for product: {product.ref_id}")
 
 
+# Define the required column names and order
+REQUIRED_COLUMNS = [
+    "id", "brand", "categories", "manufacturer", "name",
+    "reviews.date", "reviews.dateAdded", "reviews.didPurchase",
+    "reviews.doRecommend", "reviews.id", "reviews.rating",
+    "reviews.text", "reviews.title", "reviews.username"
+]
+
+
 def upload_csv(request):
     if request.method == "POST":
-        file = request.FILES['file']
-        obj = File.objects.create(file=file)
-        create_db(obj.file, request.user)
+        file = request.FILES.get('file')
+
+        # Check if a file was uploaded
+        if not file:
+            messages.error(request, "No file selected. Please upload a file.")
+            return render(request, 'pages/csv_input.html')
+
+        # Check if the file is a CSV
+        if not file.name.endswith('.csv'):
+            messages.error(
+                request, "Invalid file type. Please upload a CSV file.")
+            return render(request, 'pages/csv_input.html')
+
+        try:
+            # Read and validate the CSV file
+            file_wrapper = TextIOWrapper(file.file, encoding='utf-8')
+            reader = csv.reader(file_wrapper)
+            header = next(reader)  # Get the header row
+
+            # Validate the header columns
+            if header != REQUIRED_COLUMNS:
+                messages.error(
+                    request,
+                    f"Invalid CSV format. Columns must be: {
+                        ', '.join(REQUIRED_COLUMNS)}"
+                )
+                return render(request, 'pages/csv_input.html')
+
+            # Save the file to the model
+            obj = File.objects.create(file=file)
+
+            # Call your custom function to process the file
+            create_db(obj.file, request.user)
+            messages.success(
+                request, "File uploaded and processed successfully!")
+
+        except Exception as e:
+            # Handle unexpected errors gracefully
+            messages.error(request, f"An error occurred: {e}")
+            return render(request, 'pages/csv_input.html')
 
     return render(request, 'pages/csv_input.html')
 
@@ -205,15 +254,22 @@ def product_detail_view(request, pk):
     else:
         positive_percentage = negative_percentage = neutral_percentage = 0
 
-    # Paginate reviews (5 reviews per page)
+    # Pagination Part
+
     paginator = Paginator(reviews, 5)
     page = request.GET.get('page')
 
     try:
+        # Convert page to an integer and check if it’s valid
+        page = int(page)
+        if page < 1:  # If page is less than 1, reset to the first page
+            page = 1
         paginated_reviews = paginator.page(page)
-    except PageNotAnInteger:
+    except (ValueError, TypeError):
+        # Handle cases where page is not a number or is None
         paginated_reviews = paginator.page(1)
     except EmptyPage:
+        # If the page number is too high, show the last page
         paginated_reviews = paginator.page(paginator.num_pages)
 
     context = {

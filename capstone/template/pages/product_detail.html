@@ -1,7 +1,8 @@
 {% extends "main_layout.html" %}
 {% load static %}
 {% block title %}
-  {{ product.title }}
+  {{
+  product.title }}
 {% endblock title %}
 {% block style %}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -46,7 +47,9 @@
             <h3>AI Generated Summary</h3>
             <p>{{ product.review_summary }}</p>
           </div>
-          {% comment %} <a href="{% url 'product_edit' pk=product.pk %}" class="btn btn-primary">Edit</a> {% endcomment %}
+          {% comment %}
+        <a href="{% url 'product_edit' pk=product.pk %}" class="btn btn-primary">Edit</a>
+          {% endcomment %}
         </div>
       </div>
       <div class="chartContainer">
@@ -142,12 +145,17 @@
           <h4>{{ review.title }}</h4>
           <p>
             <strong>Rating:</strong>
-            <span class="star-rating"
-                  id="star-rating"
-                  {% comment %}
-                  id="star-rating-{{ forloop.counter }}"
-                  {% endcomment %}
-                  data-rating="{{ review.rating }}"></span>
+            <span
+              class="star-rating"
+              id="star-rating"
+              {%
+              comment
+              %}
+              id="star-rating-{{ forloop.counter }}"
+              {%
+              endcomment
+              %}
+            data-rating="{{ review.rating }}"></span>
             ({{ review.rating }}/5)
           </p>
           <p>
@@ -169,17 +177,22 @@
   <!-- Pagination controls -->
   <div class="pagination">
     <span class="step-links">
-      {% if reviews.has_previous %}
-        <a href="?page=1" class="pagination-link">&laquo; first</a>
-        <a href="?page={{ reviews.previous_page_number }}"
-           class="pagination-link">previous</a>
-      {% endif %}
+      <a href="?page=1"
+         class="pagination-link {% if not reviews.has_previous %}disabled{% endif %}"
+         {% if not reviews.has_previous %}aria-disabled="true" tabindex="-1"{% endif %}>&laquo; First</a>
+      <!-- Previous Button -->
+      <a href="{% if reviews.has_previous %}?page={{ reviews.previous_page_number }}{% else %}#{% endif %}"
+         class="pagination-link {% if not reviews.has_previous %}disabled{% endif %}"
+         {% if not reviews.has_previous %}aria-disabled="true" tabindex="-1"{% endif %}>Previous</a>
       <span class="current">Page {{ reviews.number }} of {{ reviews.paginator.num_pages }}</span>
-      {% if reviews.has_next %}
-        <a href="?page={{ reviews.next_page_number }}" class="pagination-link">next</a>
-        <a href="?page={{ reviews.paginator.num_pages }}"
-           class="pagination-link">last &raquo;</a>
-      {% endif %}
+      <!-- Next Button -->
+      <a href="{% if reviews.has_next %}?page={{ reviews.next_page_number }}{% else %}#{% endif %}"
+         class="pagination-link {% if not reviews.has_next %}disabled{% endif %}"
+         {% if not reviews.has_next %}aria-disabled="true" tabindex="-1"{% endif %}>Next</a>
+      <!-- Last Button -->
+      <a href="{% if reviews.has_next %}?page={{ reviews.paginator.num_pages }}{% else %}#{% endif %}"
+         class="pagination-link {% if not reviews.has_next %}disabled{% endif %}"
+         {% if not reviews.has_next %}aria-disabled="true" tabindex="-1"{% endif %}>Last &raquo;</a>
     </span>
   </div>
   <script>
@@ -306,16 +319,16 @@ setBarWidth(ratingBars[4], product.one_star_count);
 
 </script>
   <style>
-    .detail-box {
-      border: 1px solid #ccc;
-      padding: 20px;
-      border-radius: 10px;
-      background-color: #fff;
-      margin: 30px auto;
-      width: 98%;
-      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+  .detail-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    margin: 30px auto;
+    width: 98%;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
   }
-  .details-box{
+  .details-box {
     width: 98%%;
   }
   .review-box {
@@ -324,7 +337,11 @@ setBarWidth(ratingBars[4], product.one_star_count);
     border-radius: 5px;
     margin-bottom: 15px;
   }
-  .star-rating i { color: #ffd700; font-size: 20px; margin-right: 2px; }
+  .star-rating i {
+    color: #ffd700;
+    font-size: 20px;
+    margin-right: 2px;
+  }
   .reviews-box {
     width: 90%;
     padding: 20px;
@@ -335,76 +352,79 @@ setBarWidth(ratingBars[4], product.one_star_count);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   /* Container to hold the chart containers side by side */
-.chartContainer {
-  display: flex;
-  justify-content: space-between; /* Distribute space between containers */
-  gap: 20px; /* Adds space between each chart container */
-  flex-wrap: wrap; /* Allows charts to wrap to the next line on small screens */
-  margin-top: 40px; /* Add space between the details box and the charts */
-}
-
-/* Styling each individual chart container */
-.chart-container {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  flex: 1; /* Makes sure each container takes equal width */
-  max-width: 33%; /* Limits each container to a third of the row width */
-  min-width: 250px; /* Prevents the containers from shrinking too much */
-  box-sizing: border-box; /* Ensures padding is included in the width calculation */
-}
-
-/* Chart container heading styling */
-.chart-container h2 {
-  margin-bottom: 20px;
-}
-
-/* Optional: Media Query for smaller screens (responsive layout) */
-@media (max-width: 768px) {
   .chartContainer {
-    flex-direction: column; /* Stack the charts vertically on small screens */
-    align-items: center;
+    display: flex;
+    justify-content: space-between; /* Distribute space between containers */
+    gap: 20px; /* Adds space between each chart container */
+    flex-wrap: wrap; /* Allows charts to wrap to the next line on small screens */
+    margin-top: 40px; /* Add space between the details box and the charts */
   }
-  
-  /* Make chart containers take up full width on small screens */
-  .chart-container {
-    max-width: 100%;
-  }
-}
 
-/* Styling the container with a thin border */
-.details-box {
+  /* Styling each individual chart container */
+  .chart-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex: 1; /* Makes sure each container takes equal width */
+    max-width: 33%; /* Limits each container to a third of the row width */
+    min-width: 250px; /* Prevents the containers from shrinking too much */
+    box-sizing: border-box; /* Ensures padding is included in the width calculation */
+  }
+
+  /* Chart container heading styling */
+  .chart-container h2 {
+    margin-bottom: 20px;
+  }
+
+  /* Optional: Media Query for smaller screens (responsive layout) */
+  @media (max-width: 768px) {
+    .chartContainer {
+      flex-direction: column; /* Stack the charts vertically on small screens */
+      align-items: center;
+    }
+
+    /* Make chart containers take up full width on small screens */
+    .chart-container {
+      max-width: 100%;
+    }
+  }
+
+  /* Styling the container with a thin border */
+  .details-box {
     border: 1px solid #ccc; /* Thin gray border */
     padding: 20px; /* Padding inside the box */
     border-radius: 10px; /* Rounded corners */
     background-color: #fff; /* White background inside the box */
     margin: 30px auto; /* Centering the box and adding top and bottom space */
-    max-width: 90%; 
+    max-width: 90%;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05); /* Optional subtle shadow */
   }
-  
+
   /* Styling inside the box (optional adjustments to text styling) */
-  .details-box h1, .details-box h2, .details-box h3, .details-box p {
+  .details-box h1,
+  .details-box h2,
+  .details-box h3,
+  .details-box p {
     margin: 10px 0;
   }
-  
+
   .detail-box h1 {
     font-size: 2.2rem;
     color: #007bff;
   }
-  
+
   .detail-box h2 {
     font-size: 1.8rem;
     color: #343a40;
   }
-  
+
   .detail-box h3 {
     font-size: 1rem;
     color: #5aa6e8;
   }
-  
+
   .detail-box p {
     font-size: 1.125rem;
     color: #555;
@@ -418,47 +438,46 @@ setBarWidth(ratingBars[4], product.one_star_count);
     font-weight: normal; /* Ensure the right side text remains normal */
     color: #555; /* Optional: add a subtle color difference */
     line-height: 1.6;
-
   }
-/* Container to hold the chart containers side by side */
-.chartContainer {
-  display: flex;
-  justify-content: space-between; /* Distribute space between containers */
-  gap: 20px; /* Adds space between each chart container */
-  flex-wrap: wrap; /* Allows charts to wrap to the next line on small screens */
-  margin-top: 40px; /* Add space between the details box and the charts */
-}
-
-/* Styling each individual chart container */
-.chart-container {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  flex: 1; /* Makes sure each container takes equal width */
-  max-width: 33%; /* Limits each container to a third of the row width */
-  min-width: 250px; /* Prevents the containers from shrinking too much */
-  box-sizing: border-box; /* Ensures padding is included in the width calculation */
-}
-
-/* Chart container heading styling */
-.chart-container h2 {
-  margin-bottom: 20px;
-}
-
-/* Optional: Media Query for smaller screens (responsive layout) */
-@media (max-width: 768px) {
+  /* Container to hold the chart containers side by side */
   .chartContainer {
-    flex-direction: column; /* Stack the charts vertically on small screens */
-    align-items: center;
+    display: flex;
+    justify-content: space-between; /* Distribute space between containers */
+    gap: 20px; /* Adds space between each chart container */
+    flex-wrap: wrap; /* Allows charts to wrap to the next line on small screens */
+    margin-top: 40px; /* Add space between the details box and the charts */
   }
-  
-  /* Make chart containers take up full width on small screens */
+
+  /* Styling each individual chart container */
   .chart-container {
-    max-width: 100%;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex: 1; /* Makes sure each container takes equal width */
+    max-width: 33%; /* Limits each container to a third of the row width */
+    min-width: 250px; /* Prevents the containers from shrinking too much */
+    box-sizing: border-box; /* Ensures padding is included in the width calculation */
   }
-}
+
+  /* Chart container heading styling */
+  .chart-container h2 {
+    margin-bottom: 20px;
+  }
+
+  /* Optional: Media Query for smaller screens (responsive layout) */
+  @media (max-width: 768px) {
+    .chartContainer {
+      flex-direction: column; /* Stack the charts vertically on small screens */
+      align-items: center;
+    }
+
+    /* Make chart containers take up full width on small screens */
+    .chart-container {
+      max-width: 100%;
+    }
+  }
 
   .review-box {
     background-color: #f9f9f9;
@@ -466,7 +485,11 @@ setBarWidth(ratingBars[4], product.one_star_count);
     border-radius: 5px;
     margin-bottom: 15px;
   }
-  .star-rating i { color: #ffd700; font-size: 20px; margin-right: 2px; }
+  .star-rating i {
+    color: #ffd700;
+    font-size: 20px;
+    margin-right: 2px;
+  }
   .reviews-box {
     width: 90%;
     padding: 20px;

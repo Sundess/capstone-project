@@ -104,19 +104,37 @@ span {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* General styles for the pagination container  */
-/* Center the pagination container */
-.pagination {
-  text-align: center;
-  margin-top: 20px;
-  font-family: Arial, sans-serif;
-}
-
-/* Style for the step-links wrapper */
-.step-links {
-  display: inline-block;
-  font-size: 14px;
-  color: #555;
-}
-
 /* Style for individual pagination links */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.pagination-link {
+  text-decoration: none;
+  color: white;
+  background-color: #0d2aca;
+  padding: 12px 12px;
+  border-radius: 4px;
+}
+
+.pagination-link.disabled {
+  pointer-events: none;
+  color: #999;
+  background-color: #0d2aca;
+  text-decoration: none;
+  cursor: not-allowed;
+}
+
+.current {
+  font-size: 16px;
+  margin: 0px 12px;
+}
+
+/* .pagination-box {
+  display: flex;
+  background-color: #007bff;
+} */
