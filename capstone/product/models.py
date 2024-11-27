@@ -26,6 +26,10 @@ class Product(models.Model):
     three_star_count = models.PositiveIntegerField(default=0)
     four_star_count = models.PositiveIntegerField(default=0)
     five_star_count = models.PositiveIntegerField(default=0)
+    
+     # New field to store the highest sentiment percentage
+    highest_sentiment_percentage = models.CharField(max_length=100)
+
 
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="products")

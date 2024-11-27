@@ -172,8 +172,7 @@ def upload_csv(request):
             if header != REQUIRED_COLUMNS:
                 messages.error(
                     request,
-                    f"Invalid CSV format. Columns must be: {
-                        ', '.join(REQUIRED_COLUMNS)}"
+                    f"Invalid CSV format. Columns must be: {', '.join(REQUIRED_COLUMNS)}"
                 )
                 return render(request, 'pages/csv_input.html')
 
@@ -221,24 +220,64 @@ def product_detail_view(request, pk):
         Product.objects.prefetch_related('reviews'), pk=pk)
     # Order reviews by review date descending
     reviews = product.reviews.all().order_by('-review_date')
+    
+    
+
+    # Perform sentiment analysis on reviews
+    # for review in reviews:
+    #     if review.rating < 3:
+    #         review.sentiment = "Negative"
+    #     else:
+    #         sentiment_polarity = TextBlob(review.text).sentiment.polarity
+    #         review.sentiment = (
+    #             "Positive" if sentiment_polarity > 0.1 else
+    #             "Negative" if sentiment_polarity < -0.1 else
+    #             "Neutral"
+    #         )
+    #   # Get the sentiment filter from GET parameters
+    # sentiment_filter = request.GET.get('sentiment_filter', 'all')
+    # if sentiment_filter != 'all':
+    #       reviews = [review for review in reviews if review.sentiment == sentiment_filter]
+
+
+    # # Calculate sentiment type counts
+    # sentiment_counts = Counter(review.sentiment for review in reviews)
+    # total_reviews = len(reviews)
+    
+    #   Vader
+    from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+    from collections import Counter
+
+    # Initialize VADER sentiment analyzer
+    analyzer = SentimentIntensityAnalyzer()
 
     # Perform sentiment analysis on reviews
     for review in reviews:
         if review.rating < 3:
             review.sentiment = "Negative"
         else:
-            sentiment_polarity = TextBlob(review.text).sentiment.polarity
+            # Use VADER to analyze the sentiment of the review text
+            sentiment_scores = analyzer.polarity_scores(review.text)
+            compound_score = sentiment_scores['compound']
             review.sentiment = (
-                "Positive" if sentiment_polarity > 0.1 else
-                "Negative" if sentiment_polarity < -0.1 else
+                "Positive" if compound_score > 0.1 else
+                "Negative" if compound_score < -0.1 else
                 "Neutral"
             )
 
-    # Calculate sentiment type counts
+# Get the sentiment filter from GET parameters
+    sentiment_filter = request.GET.get('sentiment_filter', 'all')
+    if sentiment_filter != 'all':
+        reviews = [review for review in reviews if review.sentiment == sentiment_filter]
+
+# Calculate sentiment type counts
     sentiment_counts = Counter(review.sentiment for review in reviews)
     total_reviews = len(reviews)
 
+<<<<<<< HEAD
     # sentiment_counts['Positive'] / total_reviews) * 100
+=======
+>>>>>>> ee2747377c6be4151d51822cc0b269c48ecffe3e
 
 # Calculate sentiment percentages
     if total_reviews > 0:
@@ -250,6 +289,21 @@ def product_detail_view(request, pk):
             sentiment_counts['Neutral'] / total_reviews) * 100
     else:
         positive_percentage = negative_percentage = neutral_percentage = 0
+        
+    # Determine the majority sentiment based on percentages
+    if positive_percentage > negative_percentage and positive_percentage > neutral_percentage:
+        majority_sentiment = "Positive"
+    elif negative_percentage > positive_percentage and negative_percentage > neutral_percentage:
+        majority_sentiment = "Negative"
+    elif neutral_percentage > positive_percentage and neutral_percentage > negative_percentage:
+        majority_sentiment = "Neutral"
+    else:
+        majority_sentiment = "Neutral"  # Default in case of a tie or no clear majority
+
+    # Store the majority sentiment in the product model
+    product.highest_sentiment_percentage = majority_sentiment
+    product.save()
+
 
     # Pagination Part
 
@@ -275,5 +329,39 @@ def product_detail_view(request, pk):
         'positive_percentage': positive_percentage,
         'negative_percentage': negative_percentage,
         'neutral_percentage': neutral_percentage,
+        'majority_sentiment': majority_sentiment,
+        'sentiment_filter': sentiment_filter, 
+       
     }
     return render(request, 'pages/product_detail.html', context)
+
+from django.shortcuts import render
+from django.core.paginator import Paginator
+from .models import Product
+
+def search_product_view(request):
+    # Get the search query from the request
+    query = request.GET.get('q', '').strip()
+
+    # Filter products based on the search query
+    if query:
+        products = Product.objects.filter(name__icontains=query) | Product.objects.filter(description__icontains=query)
+    else:
+        products = Product.objects.none()  # Empty result if no query provided
+
+    # Set up pagination for the results
+    paginator = Paginator(products, 10)  # Show 10 products per page
+    page_number = request.GET.get('page', 1)
+
+    try:
+        paginated_products = paginator.page(page_number)
+    except (EmptyPage, ValueError):
+        paginated_products = paginator.page(paginator.num_pages)
+
+    context = {
+        'query': query,
+        'products': paginated_products,
+    }
+
+    return render(request, 'pages/search_results.html', context)
+
