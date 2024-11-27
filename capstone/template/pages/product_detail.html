@@ -1,8 +1,7 @@
 {% extends "main_layout.html" %}
 {% load static %}
 {% block title %}
-  {{
-  product.title }}
+  {{ product.title }}
 {% endblock title %}
 {% block style %}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -14,563 +13,304 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
         rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'css/product_detail.css' %}" />
-  <script src="https://cdn.jsdelivr.net/npm/wordcloud"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body{
+      background-color:#EEE6D8;
+      {% comment %} margin:10px; {% endcomment %}
+      padding:65px;
+      font-family: 'Source Sans Pro', sans-serif;
+    }
+    .detail-box {
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #EEE6D8;
+      margin: 30px auto;
+      width: 98%;
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+    }
 
+    .detail-box h1 {
+      font-size: 2.2rem;
+      color: #007bff;
+      margin-bottom: 20px;
+    }
+
+    .detail-box h3 {
+      font-size: 1.2rem;
+      color: #343a40;
+      margin-bottom: 10px;
+    }
+
+    .detail-box h3 span {
+      font-weight: normal;
+      color: #555;
+    }
+
+    .details-box {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #EEE6D8;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .details-box h3 {
+      font-size: 1.5rem;
+      color: #007bff;
+      margin-bottom: 15px;
+    }
+
+    .details-box p {
+      font-size: 1.125rem;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .categories {
+      display: block;
+      color: #555;
+      margin-top: 5px;
+      line-height: 1.6;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .back-button .btn {
+      color: #007bff;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .back-button .btn:hover {
+      text-decoration: underline;
+    }
 
   
+  
+    .filter-box {
+      margin-right: 20px; /* Adds spacing between the filter box and the heading */
+      display: flex;
+      align-items: center; /* Aligns label and dropdown vertically */
+      justify-content: space-between;
+  }
+  
+  .form-select {
+      margin-left: 0px; /* Space between label and dropdown */
+      width: 150px; /* Adjust the width of the dropdown */
+      margin-bottom:10px;
+  }
 
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  #first{
+    {% comment %} background-color:#EEE6D8 {% endcomment %}
+  }
+  
+</style>
 {% endblock style %}
 {% block body %}
   <div class="container">
     <a href="{% url 'dashboard' %}" class="back-button">
       <button type="button" class="btn btn-link">Back</button>
     </a>
-    <div class="row">
-      <div class="col-md-12">
+    <div class="row" id="first">
+      <div class="col-md-12",background-color="#EEE6D8">
         <div class="detail-box">
           <h1>{{ product.title }}</h1>
+          <h3>Reference ID: <span>{{ product.ref_id }}</span></h3>
+          <h3>Brand: <span>{{ product.brand }}</span></h3>
+          <h3>Manufacturer: <span>{{ product.manufacture }}</span></h3>
           <h3>
-            Reference ID: <span>{{ product.ref_id }}</span>
-          </h3>
-          <h3>
-            Brand: <span>{{ product.brand }}</span>
-          </h3>
-          <h3>
-            Manufacturer: <span>{{ product.manufacture }}</span>
-          </h3>
-          <h3>
-            Categories: <span>{{ product.categories }}</span>
+            Categories:
+            <span class="categories">
+              {{ product.categories|join:", " }}
+            </span>
           </h3>
           <div class="details-box">
             <h3>AI Generated Summary</h3>
             <p>{{ product.review_summary }}</p>
           </div>
-          {% comment %}
-        <a href="{% url 'product_edit' pk=product.pk %}" class="btn btn-primary">Edit</a>
-          {% endcomment %}
-        </div>
-      </div>
-      <div class="chartContainer">
-        <div class="chart-container">
-          <h2>Product Ratings Overview</h2>
-          <canvas id="ratingsBarChart" width="300" height="200"></canvas>
-        </div>
-        <div class="chart-container">
-          <h2>Recommendation Overview</h2>
-          <canvas id="recommendPieChart" width="300" height="100"></canvas>
-        </div>
-        <div class="chart-container">
-          <h2>Sentiment Analysis</h2>
-          <canvas id="sentimentPieChart" width="300" height="100"></canvas>
         </div>
       </div>
     </div>
-  </div>
 
-  {% comment %} rating code {% endcomment %}
-
-  <div class="ratingscount">
-    <div class="rating-container">
-      <div class="overall-rating">{{product.avg_rating}}/5</div>
-      <div class="star-rating">
-        <i class="fa fa-star"></i>
-        <i class="fa fa-star"></i>
-        <i class="fa fa-star"></i>
-        <i class="fa fa-star-half-o"></i>
-        <i class="fa fa-star-o"></i>
+    <div class="chartContainer">
+      <div class="chart-container">
+        <h2>Product Ratings Overview</h2>
+        <canvas id="ratingsBarChart" width="300" height="200"></canvas>
       </div>
-  
-      <!-- Rating Distribution -->
-      <div class="rating-distribution">
-        <!-- 5-star rating bar -->
-        <div class="rating-bar-container">
-          <div class="star-container" data-stars="5">5 Star</div>
-          <div class="rating-bar">
-            <div class="rating-bar-fill" style="width: 0%;"></div>
-          </div>
-          <span class="rating-count">{{product.five_star_count}}</span>
-        </div>
-  
-        <!-- 4-star rating bar -->
-        <div class="rating-bar-container">
-          <div class="star-container" data-stars="4">4 Star</div>
-          <div class="rating-bar">
-            <div class="rating-bar-fill" style="width: 0%;"></div>
-          </div>
-          <span class="rating-count">{{product.four_star_count}}</span>
-        </div>
-  
-        <!-- 3-star rating bar -->
-        <div class="rating-bar-container">
-          <div class="star-container" data-stars="3">3 Star</div>
-          <div class="rating-bar">
-            <div class="rating-bar-fill" style="width: 0%;"></div>
-          </div>
-          <span class="rating-count">{{product.three_star_count}}</span>
-        </div>
-  
-        <!-- 2-star rating bar -->
-        <div class="rating-bar-container">
-          <div class="star-container" data-stars="2">2 Star</div>
-          <div class="rating-bar">
-            <div class="rating-bar-fill" style="width: 0%;"></div>
-          </div>
-          <span class="rating-count">{{product.two_star_count}}</span>
-        </div>
-  
-        <!-- 1-star rating bar -->
-        <div class="rating-bar-container">
-          <div class="star-container" data-stars="1">1 Star</div>
-          <div class="rating-bar">
-            <div class="rating-bar-fill" style="width: 0%;"></div>
-          </div>
-          <span class="rating-count">{{product.one_star_count}}</span>
-        </div>
+      <div class="chart-container">
+        <h2>Recommendation Overview</h2>
+        <canvas id="recommendPieChart" width="300" height="100"></canvas>
+      </div>
+      <div class="chart-container">
+        <h2>Sentiment Analysis</h2>
+        <canvas id="sentimentPieChart" width="300" height="100"></canvas>
       </div>
     </div>
   </div>
-  
-
-  {% comment %} rating code finish {% endcomment %}
-  
-  
 
   <div class="reviews-box">
-    <h3>Reviews</h3>
+    <div class="filter-box">
+      <h3>Reviews</h3>
+      {% comment %} <label for="rating-filter">Filter by Rating:</label> {% endcomment %}
+      <select id="rating-filter" class="form-select">
+        <option value="all">All</option>
+        <option value="1">1 Star</option>
+        <option value="2">2 Stars</option>
+        <option value="3">3 Stars</option>
+        <option value="4">4 Stars</option>
+        <option value="5">5 Stars</option>
+      </select>
+
+      <form method="get" id="sentiment-filter-form">
+        {% comment %} <label for="sentiment-filter">Filter by Sentiment:</label> {% endcomment %}
+        <select id="sentiment-filter" name="sentiment_filter" class="form-select" onchange="document.getElementById('sentiment-filter-form').submit();">
+            <option value="all" {% if sentiment_filter == 'all' %}selected{% endif %}>All</option>
+            <option value="Positive" {% if sentiment_filter == 'Positive' %}selected{% endif %}>Positive</option>
+            <option value="Neutral" {% if sentiment_filter == 'Neutral' %}selected{% endif %}>Neutral</option>
+            <option value="Negative" {% if sentiment_filter == 'Negative' %}selected{% endif %}>Negative</option>
+        </select>
+    </form>
+
+    </div>
     {% if reviews %}
-      {% for review in reviews %}
-        <div class="review-box">
-          <h4>{{ review.title }}</h4>
-          <p>
-            <strong>Rating:</strong>
-            <span
-              class="star-rating"
-              id="star-rating"
-              {%
-              comment
-              %}
-              id="star-rating-{{ forloop.counter }}"
-              {%
-              endcomment
-              %}
-            data-rating="{{ review.rating }}"></span>
-            ({{ review.rating }}/5)
-          </p>
-          <p>
-            <strong>Review Text:</strong> {{ review.text }}
-          </p>
-          <p>
-            <strong>Review by:</strong> {{ review.username }} on {{ review.review_date }}
-          </p>
-          <p>
-            <strong>Sentiment:</strong> {{ review.sentiment }}
-          </p>
-          <hr />
-        </div>
-      {% endfor %}
+      <div id="review-container">
+        {% for review in reviews %}
+          <div class="review-box" data-rating="{{ review.rating }}">
+            <h4>{{ review.title }}</h4>
+            <p>
+              <strong>Rating:</strong>
+              <span class="star-rating" data-rating="{{ review.rating }}"></span>
+              ({{ review.rating }}/5)
+            </p>
+            <p><strong>Review Text:</strong> {{ review.text }}</p>
+            <p><strong>Review by:</strong> {{ review.username }} on {{ review.review_date }}</p>
+            <p><strong>Sentiment:</strong> {{ review.sentiment }}</p>
+            <hr />
+          </div>
+        {% endfor %}
+      </div>
     {% else %}
       <p>No reviews available for this product.</p>
     {% endif %}
   </div>
-  <!-- Pagination controls -->
-  <div class="pagination">
-    <span class="step-links">
-      <a href="?page=1"
-         class="pagination-link {% if not reviews.has_previous %}disabled{% endif %}"
-         {% if not reviews.has_previous %}aria-disabled="true" tabindex="-1"{% endif %}>&laquo; First</a>
-      <!-- Previous Button -->
-      <a href="{% if reviews.has_previous %}?page={{ reviews.previous_page_number }}{% else %}#{% endif %}"
-         class="pagination-link {% if not reviews.has_previous %}disabled{% endif %}"
-         {% if not reviews.has_previous %}aria-disabled="true" tabindex="-1"{% endif %}>Previous</a>
-      <span class="current">Page {{ reviews.number }} of {{ reviews.paginator.num_pages }}</span>
-      <!-- Next Button -->
-      <a href="{% if reviews.has_next %}?page={{ reviews.next_page_number }}{% else %}#{% endif %}"
-         class="pagination-link {% if not reviews.has_next %}disabled{% endif %}"
-         {% if not reviews.has_next %}aria-disabled="true" tabindex="-1"{% endif %}>Next</a>
-      <!-- Last Button -->
-      <a href="{% if reviews.has_next %}?page={{ reviews.paginator.num_pages }}{% else %}#{% endif %}"
-         class="pagination-link {% if not reviews.has_next %}disabled{% endif %}"
-         {% if not reviews.has_next %}aria-disabled="true" tabindex="-1"{% endif %}>Last &raquo;</a>
-    </span>
-  </div>
+
   <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const starContainers = document.querySelectorAll(".star-rating");
-    starContainers.forEach((container) => {
-      const rating = parseInt(container.getAttribute("data-rating"), 10);
-      let starHTML = "";
-      for (let i = 1; i <= rating; i++) {
-        starHTML += '<i class="material-icons">star</i>';
-      }
-      for (let i = rating + 1; i <= 5; i++) {
-        starHTML += '<i class="material-icons">star_border</i>';
-      }
-      container.innerHTML = starHTML;
+    // Star Ratings
+    document.addEventListener("DOMContentLoaded", function () {
+      const starContainers = document.querySelectorAll(".star-rating");
+      starContainers.forEach((container) => {
+        const rating = parseInt(container.getAttribute("data-rating"), 10);
+        let starHTML = "";
+        for (let i = 1; i <= rating; i++) {
+          starHTML += '<i class="material-icons">star</i>';
+        }
+        for (let i = rating + 1; i <= 5; i++) {
+          starHTML += '<i class="material-icons">star_border</i>';
+        }
+        container.innerHTML = starHTML;
+      });
+
+      // Filter Reviews
+      const filterDropdown = document.getElementById("rating-filter");
+      const reviewsContainer = document.getElementById("review-container");
+      const allReviews = Array.from(reviewsContainer.querySelectorAll(".review-box"));
+
+      filterDropdown.addEventListener("change", function () {
+        const selectedRating = filterDropdown.value;
+
+        allReviews.forEach((review) => {
+          const reviewRating = review.getAttribute("data-rating");
+
+          if (selectedRating === "all" || reviewRating === selectedRating) {
+            review.style.display = "block";
+          } else {
+            review.style.display = "none";
+          }
+        });
+      });
     });
-  });
 
-  const ctxBar = document.getElementById('ratingsBarChart').getContext('2d');
-  const ratingsBarChart = new Chart(ctxBar, {
-    type: 'bar',
-    data: {
-      labels: ['Total Ratings','Total Reviews'],
-      datasets: [{
-        label: 'Total Number',
-        data: [
-          {{ product.rating_count }},
-          {{ product.reviews_count }}
-        ],
-        backgroundColor: [
-          'rgba(75, 192, 192, 0.5)',
-      
-          'rgba(255, 205, 86, 0.5)'
-        ],
-        borderColor: [
-          'rgba(75, 192, 192, 1)',
-          'rgba(255, 205, 86, 1)'
-        ],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { position: 'top' }, tooltip: {} }
-    }
-  });
+    // Charts
+    const ctxBar = document.getElementById('ratingsBarChart').getContext('2d');
+    const ratingsBarChart = new Chart(ctxBar, {
+      type: 'bar',
+      data: {
+        labels: ['Total Ratings', 'Average Ratings', 'Total Reviews'],
+        datasets: [{
+          label: 'Ratings Data',
+          data: [
+            {{ product.rating_count }},
+            {{ product.avg_rating }},
+            {{ product.reviews_count }}
+          ],
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.5)',
+            'rgba(153, 102, 255, 0.5)',
+            'rgba(255, 205, 86, 0.5)'
+          ],
+          borderColor: [
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 205, 86, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'top' }, tooltip: {} }
+      }
+    });
 
-  const ctxPie = document.getElementById('recommendPieChart').getContext('2d');
-  const recommendPieChart = new Chart(ctxPie, {
-    type: 'pie',
-    data: {
-      labels: ['Recommend', 'Not Recommend'],
-      datasets: [{
-        data: [
-          {{ product.do_recommend_count }},
-          {% comment %} {{ product.rating_count|add:"-product.do_recommend_count" }} {% endcomment %}
-          {{ product.rating_count}}-{{ product.do_recommend_count }}
+    const ctxPie = document.getElementById('recommendPieChart').getContext('2d');
+    const recommendPieChart = new Chart(ctxPie, {
+      type: 'pie',
+      data: {
+        labels: ['Recommend', 'Not Recommend'],
+        datasets: [{
+          data: [
+            {{ product.do_recommend_count }},
+            {{ product.rating_count|add:"-product.do_recommend_count" }}
+          ],
+          backgroundColor: ['rgba(255, 159, 64, 0.5)', 'rgba(255, 99, 132, 0.5)'],
+          borderColor: ['rgba(255, 159, 64, 1)', 'rgba(255, 99, 132, 1)'],
+          borderWidth: 1
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { position: 'top' }, tooltip: {} }}
+    });
 
-        ],
-        backgroundColor: ['rgba(255, 159, 64, 0.5)', 'rgba(255, 99, 132, 0.5)'],
-        borderColor: ['rgba(255, 159, 64, 1)', 'rgba(255, 99, 132, 1)'],
-        borderWidth: 1
-      }]
-    },
-    options: { responsive: true, plugins: { legend: { position: 'top' }, tooltip: {} }}
-  });
-
-  const ctxSentiment = document.getElementById('sentimentPieChart').getContext('2d');
-  const sentimentPieChart = new Chart(ctxSentiment, {
-    type: 'pie',
-    data: {
-      labels: ['Positive', 'Negative', 'Neutral'],
-      datasets: [{
-        data: [
-          {{ positive_percentage }},
-          {{ negative_percentage }},
-          {{ neutral_percentage }}
-        ],
-        backgroundColor: [
-          'rgba(75, 192, 192, 0.5)',
-          'rgba(255, 99, 132, 0.5)',
-          'rgba(255, 205, 86, 0.5)'
-        ],
-        borderColor: [
-          'rgba(75, 192, 192, 1)',
-          'rgba(255, 99, 132, 1)',
-          'rgba(255, 205, 86, 1)'
-        ],
-        borderWidth: 1
-      }]
-    },
-    options: { responsive: true, plugins: { legend: { position: 'top' }, tooltip: {} }}
-  });
-
-  
-  // Assuming you have the product data in a JavaScript object
-const product = {
-  one_star_count: {{product.one_star_count}},
-  two_star_count: {{product.two_star_count}},
-  three_star_count: {{product.three_star_count}},
-  four_star_count: {{product.four_star_count}},
-  five_star_count: {{product.five_star_count}}
-};
-
-// Calculate the total number of ratings
-const totalRatings = product.one_star_count + product.two_star_count + product.three_star_count + product.four_star_count + product.five_star_count;
-
-// Function to calculate and set the width of a bar
-function setBarWidth(barElement, count) {
-  const percentage = (count / totalRatings) * 100;
-  barElement.style.width = percentage + '%';
-}
-
-// Set the width of each bar dynamically
-const ratingBars = document.querySelectorAll('.rating-bar-fill');
-setBarWidth(ratingBars[0], product.five_star_count);
-setBarWidth(ratingBars[1], product.four_star_count);
-setBarWidth(ratingBars[2], product.three_star_count);
-setBarWidth(ratingBars[3], product.two_star_count);
-setBarWidth(ratingBars[4], product.one_star_count);
-
-
-
-
-</script>
-  <style>
-  .detail-box {
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #fff;
-    margin: 30px auto;
-    width: 98%;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
-  }
-  .details-box {
-    width: 98%%;
-  }
-  .review-box {
-    background-color: #f9f9f9;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-  }
-  .star-rating i {
-    color: #ffd700;
-    font-size: 20px;
-    margin-right: 2px;
-  }
-  .reviews-box {
-    width: 90%;
-    padding: 20px;
-    margin: 0 auto;
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  /* Container to hold the chart containers side by side */
-  .chartContainer {
-    display: flex;
-    justify-content: space-between; /* Distribute space between containers */
-    gap: 20px; /* Adds space between each chart container */
-    flex-wrap: wrap; /* Allows charts to wrap to the next line on small screens */
-    margin-top: 40px; /* Add space between the details box and the charts */
-  }
-
-  /* Styling each individual chart container */
-  .chart-container {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    flex: 1; /* Makes sure each container takes equal width */
-    max-width: 33%; /* Limits each container to a third of the row width */
-    min-width: 250px; /* Prevents the containers from shrinking too much */
-    box-sizing: border-box; /* Ensures padding is included in the width calculation */
-  }
-
-  /* Chart container heading styling */
-  .chart-container h2 {
-    margin-bottom: 20px;
-  }
-
-  /* Optional: Media Query for smaller screens (responsive layout) */
-  @media (max-width: 768px) {
-    .chartContainer {
-      flex-direction: column; /* Stack the charts vertically on small screens */
-      align-items: center;
-    }
-
-    /* Make chart containers take up full width on small screens */
-    .chart-container {
-      max-width: 100%;
-    }
-  }
-
-  /* Styling the container with a thin border */
-  .details-box {
-    border: 1px solid #ccc; /* Thin gray border */
-    padding: 20px; /* Padding inside the box */
-    border-radius: 10px; /* Rounded corners */
-    background-color: #fff; /* White background inside the box */
-    margin: 30px auto; /* Centering the box and adding top and bottom space */
-    max-width: 90%;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05); /* Optional subtle shadow */
-  }
-
-  /* Styling inside the box (optional adjustments to text styling) */
-  .details-box h1,
-  .details-box h2,
-  .details-box h3,
-  .details-box p {
-    margin: 10px 0;
-  }
-
-  .detail-box h1 {
-    font-size: 2.2rem;
-    color: #007bff;
-  }
-
-  .detail-box h2 {
-    font-size: 1.8rem;
-    color: #343a40;
-  }
-
-  .detail-box h3 {
-    font-size: 1rem;
-    color: #5aa6e8;
-  }
-
-  .detail-box p {
-    font-size: 1.125rem;
-    color: #555;
-    line-height: 1.6;
-  }
-  
-  
-
-  
-  span {
-    font-weight: normal; /* Ensure the right side text remains normal */
-    color: #555; /* Optional: add a subtle color difference */
-    line-height: 1.6;
-  }
-  /* Container to hold the chart containers side by side */
-  .chartContainer {
-    display: flex;
-    justify-content: space-between; /* Distribute space between containers */
-    gap: 20px; /* Adds space between each chart container */
-    flex-wrap: wrap; /* Allows charts to wrap to the next line on small screens */
-    margin-top: 40px; /* Add space between the details box and the charts */
-  }
-
-  /* Styling each individual chart container */
-  .chart-container {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    flex: 1; /* Makes sure each container takes equal width */
-    max-width: 33%; /* Limits each container to a third of the row width */
-    min-width: 250px; /* Prevents the containers from shrinking too much */
-    box-sizing: border-box; /* Ensures padding is included in the width calculation */
-  }
-
-  /* Chart container heading styling */
-  .chart-container h2 {
-    margin-bottom: 20px;
-  }
-
-  /* Optional: Media Query for smaller screens (responsive layout) */
-  @media (max-width: 768px) {
-    .chartContainer {
-      flex-direction: column; /* Stack the charts vertically on small screens */
-      align-items: center;
-    }
-
-    /* Make chart containers take up full width on small screens */
-    .chart-container {
-      max-width: 100%;
-    }
-  }
-
-  .review-box {
-    background-color: #f9f9f9;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-  }
-  .star-rating i {
-    color: #ffd700;
-    font-size: 20px;
-    margin-right: 2px;
-  }
-  .reviews-box {
-    width: 90%;
-    padding: 20px;
-    margin: 0 auto;
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-
-  .ratingscount{
-    border: 1px solid #ccc; /* Thin gray border */
-    padding: 20px; /* Padding inside the box */
-    border-radius: 10px; /* Rounded corners */
-    background-color: #fff; /* White background inside the box */
-    margin-left: 70px; /* Centering the box and adding top and bottom space */
-    margin-bottom:30px;
-    max-width: 90%; 
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05); /* Optional subtle shadow */
-    
-
-  }
-
-
-  .rating-container {
-    margin: 20px;
-    
-  }
-  
-  .overall-rating {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .star-rating i {
-    font-size: 20px;
-    color: #ffcc00; /* Gold color for stars */
-    margin-right: 3px;
-  }
-  
-  .rating-distribution {
-    margin-top: 20px;
-  }
-  
-  .rating-bar-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .star-container {
-    display: flex;
-    margin-right: 10px;
-    width: 100px; /* Adjust width to align with the bars */
-  }
-  
-  .star-container i {
-    color: #ccc; /* Silver color for stars */
-    font-size: 18px;
-    margin-right: 2px;
-  }
-  
-  .rating-bar {
-    height: 20px;
-    background-color: #eee;
-    flex: 1;
-    margin-right: 10px;
-  }
-  
-  .rating-bar-fill {
-    height: 100%;
-    background-color: #ffcc00; /* Gold color for bars */
-  }
-  
-  .rating-count {
-    min-width: 30px;
-    text-align: right;
-    font-size: 16px;
-    color: #333;
-  }
-  
-  </style>
+    const ctxSentiment = document.getElementById('sentimentPieChart').getContext('2d');
+    const sentimentPieChart = new Chart(ctxSentiment, {
+      type: 'pie',
+      data: {
+        labels: ['Positive', 'Negative', 'Neutral'],
+        datasets: [{
+          data: [
+            {{ positive_percentage }},
+            {{ negative_percentage }},
+            {{ neutral_percentage }}
+          ],
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.5)',
+            'rgba(255, 99, 132, 0.5)',
+            'rgba(255, 205, 86, 0.5)'
+          ],
+          borderColor: [
+            'rgba(75, 192, 192, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(255, 205, 86, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { position: 'top' }, tooltip: {} }}
+    });
+  </script>
 {% endblock body %}
