@@ -1,8 +1,7 @@
 {% extends "main_layout.html" %}
 {% load static %}
 {% block title %}
-  {{
-  product.title }}
+  {{ product.title }}
 {% endblock title %}
 {% block style %}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -15,11 +14,6 @@
         rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'css/product_detail.css' %}" />
   <script src="https://cdn.jsdelivr.net/npm/wordcloud"></script>
-
-
-  
-
-
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock style %}
 {% block body %}
@@ -68,12 +62,10 @@
       </div>
     </div>
   </div>
-
   {% comment %} rating code {% endcomment %}
-
   <div class="ratingscount">
     <div class="rating-container">
-      <div class="overall-rating">{{product.avg_rating}}/5</div>
+      <div class="overall-rating">{{ product.avg_rating }}/5</div>
       <div class="star-rating">
         <i class="fa fa-star"></i>
         <i class="fa fa-star"></i>
@@ -81,7 +73,6 @@
         <i class="fa fa-star-half-o"></i>
         <i class="fa fa-star-o"></i>
       </div>
-  
       <!-- Rating Distribution -->
       <div class="rating-distribution">
         <!-- 5-star rating bar -->
@@ -90,53 +81,44 @@
           <div class="rating-bar">
             <div class="rating-bar-fill" style="width: 0%;"></div>
           </div>
-          <span class="rating-count">{{product.five_star_count}}</span>
+          <span class="rating-count">{{ product.five_star_count }}</span>
         </div>
-  
         <!-- 4-star rating bar -->
         <div class="rating-bar-container">
           <div class="star-container" data-stars="4">4 Star</div>
           <div class="rating-bar">
             <div class="rating-bar-fill" style="width: 0%;"></div>
           </div>
-          <span class="rating-count">{{product.four_star_count}}</span>
+          <span class="rating-count">{{ product.four_star_count }}</span>
         </div>
-  
         <!-- 3-star rating bar -->
         <div class="rating-bar-container">
           <div class="star-container" data-stars="3">3 Star</div>
           <div class="rating-bar">
             <div class="rating-bar-fill" style="width: 0%;"></div>
           </div>
-          <span class="rating-count">{{product.three_star_count}}</span>
+          <span class="rating-count">{{ product.three_star_count }}</span>
         </div>
-  
         <!-- 2-star rating bar -->
         <div class="rating-bar-container">
           <div class="star-container" data-stars="2">2 Star</div>
           <div class="rating-bar">
             <div class="rating-bar-fill" style="width: 0%;"></div>
           </div>
-          <span class="rating-count">{{product.two_star_count}}</span>
+          <span class="rating-count">{{ product.two_star_count }}</span>
         </div>
-  
         <!-- 1-star rating bar -->
         <div class="rating-bar-container">
           <div class="star-container" data-stars="1">1 Star</div>
           <div class="rating-bar">
             <div class="rating-bar-fill" style="width: 0%;"></div>
           </div>
-          <span class="rating-count">{{product.one_star_count}}</span>
+          <span class="rating-count">{{ product.one_star_count }}</span>
         </div>
       </div>
     </div>
   </div>
-  
-
   {% comment %} rating code finish {% endcomment %}
-  
-  
-
   <div class="reviews-box">
     <h3>Reviews</h3>
     {% if reviews %}
@@ -317,7 +299,7 @@ setBarWidth(ratingBars[4], product.one_star_count);
 
 
 
-</script>
+  </script>
   <style>
   .detail-box {
     border: 1px solid #ccc;
