@@ -7,17 +7,17 @@ from groq import Groq
 
 
 class Product(models.Model):
-    title = models.CharField(max_length=100)
-    ref_id = models.CharField(max_length=50)
-    brand = models.CharField(max_length=100)
-    manufacture = models.CharField(max_length=100)
-    categories = models.CharField(max_length=250)
+    title = models.TextField()
+    ref_id = models.TextField()
+    brand = models.TextField()
+    manufacture = models.TextField()
+    categories = models.TextField()
 
     # Auto-calculated fields based on reviews
     rating_count = models.PositiveIntegerField(default=0)
     avg_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
     reviews_count = models.PositiveIntegerField(default=0)
-    review_summary = models.CharField(max_length=250, null=True, blank=True)
+    review_summary = models.TextField(null=True, blank=True)
     do_recommend_count = models.PositiveIntegerField(default=0)
 
     # Fields to store the count of reviews by rating
