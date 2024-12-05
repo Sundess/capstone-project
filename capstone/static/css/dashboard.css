@@ -10,7 +10,7 @@ h2 {
   margin: 0;
 }
 
-h1{
+h1 {
   text-align: center;
 }
 
@@ -25,16 +25,15 @@ h1{
   justify-content: space-evenly; /* Distributes space between items */
   gap: 80px; /* Space between items */
   margin-bottom: 0 px; /* Center the display */
-  padding: 65px; /* Optional: Remove padding */
+  padding: 64px 65px 65px 65px; /* Optional: Remove padding */
 }
 
 .container {
-   /* Make three products per row with gap adjustment */
+  /* Make three products per row with gap adjustment */
   margin-bottom: 40px; /* Maintain the margin around each product */
   text-overflow: ellipsis; /* Handle overflow text */
   padding: 0px; /* Optional: Remove padding to adjust space */
 }
-
 
 .container .card .contentBx {
   h2 {

@@ -5,7 +5,7 @@ from .models import export_data_to_json
 
 
 def streamlit_view(request):
-
+    print('Here')
     export_data_to_json()
 
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

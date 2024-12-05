@@ -251,6 +251,20 @@ def product_detail_view(request, pk):
     else:
         positive_percentage = negative_percentage = neutral_percentage = 0
 
+    # Determine the majority sentiment based on percentages
+    if positive_percentage > negative_percentage and positive_percentage > neutral_percentage:
+        majority_sentiment = "Positive"
+    elif negative_percentage > positive_percentage and negative_percentage > neutral_percentage:
+        majority_sentiment = "Negative"
+    elif neutral_percentage > positive_percentage and neutral_percentage > negative_percentage:
+        majority_sentiment = "Neutral"
+    else:
+        majority_sentiment = "Neutral"  # Default in case of a tie or no clear majority
+
+    # Store the majority sentiment in the product model
+    product.highest_sentiment_percentage = majority_sentiment
+    product.save()
+
     # Pagination Part
 
     paginator = Paginator(reviews, 5)

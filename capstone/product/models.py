@@ -27,6 +27,9 @@ class Product(models.Model):
     four_star_count = models.PositiveIntegerField(default=0)
     five_star_count = models.PositiveIntegerField(default=0)
 
+    highest_sentiment_percentage = models.CharField(
+        max_length=100, default='Neutral')
+
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="products")
 
