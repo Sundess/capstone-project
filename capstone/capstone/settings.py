@@ -50,10 +50,10 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
 
-    "capstone.account",
-    "capstone.product",
-    "capstone.home",
-    "capstone.chatbot",
+    "account",
+    "product",
+    "home",
+    "chatbot",
 ]
 
 MIDDLEWARE = [
