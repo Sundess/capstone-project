@@ -15,7 +15,7 @@ def streamlit_view(request):
         return HttpResponse("Error: Streamlit script not found at the specified path.")
 
     # Use a custom port to avoid conflicts
-    streamlit_port = 8502
+    streamlit_port = 8505
     streamlit_url = f'http://localhost:{streamlit_port}/'
 
     try:

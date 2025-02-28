@@ -54,41 +54,45 @@ jq_query = ".[]"
 
 def vector_embedding():
     if "vectors" not in st.session_state:
-        # Step 1: Get review data from the database
-        st.session_state.loader = JSONLoader(
-            "../product_reviews.json", jq_schema=".[]", text_content=False
-        )
+        with st.spinner("Loading and processing documents... Please wait."):
+            time.sleep(2)  # Simulate a small delay for better UX
 
-        # Load documents into session state
-        st.session_state.docs = st.session_state.loader.load()
+            # Step 1: Get review data from the database
+            st.session_state.loader = JSONLoader(
+                "product_reviews.json", jq_schema=".[]", text_content=False
+            )
 
-        # Step 2: Split reviews into chunks
-        st.session_state.embeddings = GoogleGenerativeAIEmbeddings(
-            model="models/embedding-001"
-        )
+            # Load documents into session state
+            st.session_state.docs = st.session_state.loader.load()
 
-        st.session_state.text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1000, chunk_overlap=200
-        )  # Chunk Creation
+            # Step 2: Split reviews into chunks
+            st.session_state.embeddings = GoogleGenerativeAIEmbeddings(
+                model="models/embedding-001"
+            )
 
-        # Split the reviews into chunks for processing
-        st.session_state.final_documents = st.session_state.text_splitter.split_documents(
-            st.session_state.docs[:20]
-        )
+            st.session_state.text_splitter = RecursiveCharacterTextSplitter(
+                chunk_size=1000, chunk_overlap=200
+            )  # Chunk Creation
 
-        # Step 3: Create the vector store from documents
-        st.session_state.vectors = FAISS.from_documents(
-            st.session_state.final_documents, st.session_state.embeddings
-        )
+            # Split the reviews into chunks for processing
+            st.session_state.final_documents = st.session_state.text_splitter.split_documents(
+                st.session_state.docs[:20]
+            )
+
+            # Step 3: Create the vector store from documents
+            st.session_state.vectors = FAISS.from_documents(
+                st.session_state.final_documents, st.session_state.embeddings
+            )
+
+        st.success("Vector Store DB is Ready ✅")
 
 
-prompt1 = st.text_input("Enter Your Question From Doduments")
-
-
+# Button to trigger embedding process
 if st.button("Documents Embedding"):
     vector_embedding()
-    st.write("Vector Store DB Is Ready")
 
+
+prompt1 = st.text_input("Enter Your Question From Documents")
 
 if prompt1:
     document_chain = create_stuff_documents_chain(llm, prompt)

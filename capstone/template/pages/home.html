@@ -1,237 +1,274 @@
-{% extends "main_layout.html" %}
-{% load static %}
-{% block style %}
-    <!-- <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" /> -->
-    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap"
-          rel="stylesheet">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
-          integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer" />
-{% endblock style %}
-{% block body %}
-    <!-- Hero landing Section -->
-    <section class="split-section">
-        <div class="left-side">
-            <h1 class="main-heading">
-                <span class="orange-text">We Care</span> for Our Customers
-                <br>
-                <span>and, thier Business</span>
-            </h1>
-            <p class="subtext">
-                "Sentiment Spark is here to transform the way you understand your customers, using advanced AI to illuminate their sentiments and drive actionable insights, so your business can thrive with smarter, customer-focused strategies."
-            </p>
-            <button class="feature-button">
-                <a href="#about-us">Get Started</a>
-            </button>
-        </div>
-        <div class="right-side">
-            <img src="{% static 'assets/herophoto.png' %}" alt="Inspiring Image" />
-        </div>
-    </section>
-    <!-- Quote Rectangle -->
-    <div class="quote-rectangle">
-        <p class="quote-text">"Success is not the key to happiness. Happiness is the key to success." – Albert Schweitzer</p>
+{% extends "main_layout.html" %} {% load static %} {% block style %}
+<!-- <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" /> -->
+<link rel="stylesheet" href="{% static 'css/home.css' %}" />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+/>
+<link
+  href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap"
+  rel="stylesheet"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+  integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+{% endblock style %} {% block body %}
+<!-- Hero landing Section -->
+<section class="split-section">
+  <div class="left-side">
+    <h1 class="main-heading">
+      <span class="orange-text">We Care</span> for Our Customers
+      <br />
+      <span>and, thier Business</span>
+    </h1>
+    <p class="subtext">
+      "Sentiment Spark is here to transform the way you understand your
+      customers, using advanced AI to illuminate their sentiments and drive
+      actionable insights, so your business can thrive with smarter,
+      customer-focused strategies."
+    </p>
+    <button class="feature-button">
+      <a href="#about-us">Get Started</a>
+    </button>
+  </div>
+  <div class="right-side">
+    <img src="{% static 'assets/herophoto.png' %}" alt="Inspiring Image" />
+  </div>
+</section>
+<!-- Quote Rectangle -->
+<div class="quote-rectangle">
+  <p class="quote-text">
+    "Success is not the key to happiness. Happiness is the key to success." –
+    Albert Schweitzer
+  </p>
+</div>
+<!-- Mission Section -->
+<section class="mission-section">
+  <h2>Our Mission</h2>
+  <div class="mission-cards">
+    <!-- Card 1: Promote Awareness -->
+    <div
+      id="left-card"
+      class="card"
+      onclick="window.location.href='#about-us';"
+    >
+      <!-- <img src="" alt="Promote Awareness" class="card-icon"> -->
+      <i class="fa-solid fa-database"></i>
+      <h3>Simplify Data Management</h3>
+      <p>
+        Centralizing key metrics and user data to enable easier decision-making
+        and improved platform performance.
+      </p>
     </div>
-    <!-- Mission Section -->
-    <section class="mission-section">
-        <h2>Our Mission</h2>
-        <div class="mission-cards">
-            <!-- Card 1: Promote Awareness -->
-            <div id="left-card"
-                 class="card"
-                 onclick="window.location.href='#about-us';">
-                <!-- <img src="" alt="Promote Awareness" class="card-icon"> -->
-                <i class="fa-solid fa-database"></i>
-                <h3>Simplify Data Management</h3>
-                <p>Centralizing key metrics and user data to enable easier decision-making and improved platform performance.</p>
-            </div>
-            <!-- Card 2: Empower Individuals -->
-            <div class="cards highlight-card"
-                 onclick="window.location.href='#about-us';">
-                <!-- <img src="Media/mission2.png" alt="Empower Individuals" class="card-icon"> -->
-                <i class="fa-solid fa-gauge"></i>
-                <h3>Enhance Operational Efficiency</h3>
-                <p>Streamlining administrative tasks to optimize resource management and improve user satisfaction.</p>
-            </div>
-            <!-- Card 3: Prioritize Care -->
-            <div id="right-card"
-                 class="card"
-                 onclick="window.location.href='#about-us';">
-                <!-- <img src="Media/mission3.png" alt="Prioritize Care" class="card-icon"> -->
-                <i class="fa-solid fa-arrows-to-eye"></i>
-                <h3>Foster Data-Driven Insights</h3>
-                <p>
-                    Providing actionable insights through real-time analytics to support strategic decision-making and platform growth.
-                </p>
-            </div>
-        </div>
-    </section>
-    <!-- About Us Section -->
-    <section class="about-us-section" id="about-us">
-        <div class="left-side">
-            <img src="{% static 'assets/herophoto.png' %}" alt="About Us Image" />
-        </div>
-        <div class="right-side">
-            <h1 class="main-heading">
-                <span class="orange-text">About Us</span>
-            </h1>
-            <h1 class="aboutustext">Meet the Team Driving Platform Excellence</h1>
-            <p class="subtext">
-                Our team of administrators and developers ensures seamless platform operation, focusing on data management, user experience, and system optimization. We aim to continuously enhance the platform to meet the needs of both users and administrators, delivering valuable insights and reliable performance.
-            </p>
-            <button class="feature-button">
-                <a href="aboutus.html">Learn More</a>
-            </button>
-        </div>
-    </section>
-    <div class="container" id="faq">
-        <div class="faqheading">
-            <h1>Managing Platform Operations</h1>
-            <h1>Commonly Asked Questions</h1>
-        </div>
-        <div class="faq-section">
-            <div class="faq-question" onclick="toggleAnswer(this)">
-                What is the role of an admin dashboard?
-                <img src="{% static 'assets/downarrow.png' %}"
-                     alt="Down Arrow"
-                     class="arrow" />
-            </div>
-            <div class="faq-answer">
-                An admin dashboard provides a centralized interface for managing platform data, user accounts, and system settings, helping administrators efficiently control operations.
-            </div>
-        </div>
-        <div class="faq-section">
-            <div class="faq-question" onclick="toggleAnswer(this)">
-                What features are available on the admin dashboard?
-                <img src="{% static 'assets/downarrow.png' %}"
-                     alt="Down Arrow"
-                     class="arrow" />
-            </div>
-            <div class="faq-answer">
-                The admin dashboard includes user management, content moderation tools, activity tracking, analytics, and settings configurations to ensure smooth platform operation.
-            </div>
-        </div>
-        <div class="faq-section">
-            <div class="faq-question" onclick="toggleAnswer(this)">
-                How can I optimize my admin dashboard experience?
-                <img src="{% static 'assets/downarrow.png' %}"
-                     alt="Down Arrow"
-                     class="arrow" />
-            </div>
-            <div class="faq-answer">
-                To optimize your experience, customize the layout, prioritize essential metrics, and use filters for quicker access to reports and user activity data.
-            </div>
-        </div>
-        <div class="faq-section">
-            <div class="faq-question" onclick="toggleAnswer(this)">
-                What tasks can be managed through the admin dashboard?
-                <img src="{% static 'assets/downarrow.png' %}"
-                     alt="Down Arrow"
-                     class="arrow" />
-            </div>
-            <div class="faq-answer">
-                You can manage user roles, oversee content updates, monitor platform performance, handle inquiries, and ensure system security through the admin dashboard.
-            </div>
-        </div>
+    <!-- Card 2: Empower Individuals -->
+    <div
+      class="cards highlight-card"
+      onclick="window.location.href='#about-us';"
+    >
+      <!-- <img src="Media/mission2.png" alt="Empower Individuals" class="card-icon"> -->
+      <i class="fa-solid fa-gauge"></i>
+      <h3>Enhance Operational Efficiency</h3>
+      <p>
+        Streamlining administrative tasks to optimize resource management and
+        improve user satisfaction.
+      </p>
     </div>
-    <!-- footer section -->
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-section">
-                <h3>Sentiment Park</h3>
-                <p>Lorem ipsum dolor sit amet consectetur. Convallis est urna.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Services</h3>
-                <ul>
-                    <li>Text Summarization</li>
-                    <li>Data Analysis & Reporting</li>
-                    <li>Sentiment Analysis</li>
-                    <li>Prodcut Based Chatbot System</li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>
-                    <i class="fas fa-phone-alt"></i> +977 5464 8272
-                </p>
-                <p>
-                    <i class="fas fa-envelope"></i> <a href="mailto:rona@domain.com">sentiment@domain.com</a>
-                </p>
-                <p>
-                    <i class="fas fa-map-marker-alt"></i> Kathmandu 44600, Nepal
-                </p>
-            </div>
-            <div class="footer-section">
-                <h3>Links</h3>
-                <ul>
-                    <li>
-                        <a href="#">Privacy Policy</a>
-                    </li>
-                    <li>
-                        <a href="#">Term Of Use</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Maps</h3>
-                <p>
-                    <a href="#">Google Maps</a>
-                </p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <div class="social-media">
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-            <!-- Thin white line above copyright -->
-            <div class="footer-line"></div>
-            <p>Copyright 2023 @wecare</p>
-        </div>
-    </footer>
-    <script>
-        function toggleAnswer(questionElement) {
-          const answerElement = questionElement.nextElementSibling; 
-          const arrow = questionElement.querySelector('.arrow'); 
+    <!-- Card 3: Prioritize Care -->
+    <div
+      id="right-card"
+      class="card"
+      onclick="window.location.href='#about-us';"
+    >
+      <!-- <img src="Media/mission3.png" alt="Prioritize Care" class="card-icon"> -->
+      <i class="fa-solid fa-arrows-to-eye"></i>
+      <h3>Foster Data-Driven Insights</h3>
+      <p>
+        Providing actionable insights through real-time analytics to support
+        strategic decision-making and platform growth.
+      </p>
+    </div>
+  </div>
+</section>
+<!-- About Us Section -->
+<section class="about-us-section" id="about-us">
+  <div class="left-side">
+    <img src="{% static 'assets/herophoto.png' %}" alt="About Us Image" />
+  </div>
+  <div class="right-side">
+    <h1 class="main-heading">
+      <span class="orange-text">About Us</span>
+    </h1>
+    <h1 class="aboutustext">Meet the Team Driving Platform Excellence</h1>
+    <p class="subtext">
+      Our team of administrators and developers ensures seamless platform
+      operation, focusing on data management, user experience, and system
+      optimization. We aim to continuously enhance the platform to meet the
+      needs of both users and administrators, delivering valuable insights and
+      reliable performance.
+    </p>
+    <button class="feature-button">
+      <a href="#aboutus">Learn More</a>
+    </button>
+  </div>
+</section>
+<div class="container" id="faq">
+  <div class="faqheading">
+    <h1>Managing Platform Operations</h1>
+    <h1>Commonly Asked Questions</h1>
+  </div>
+  <div class="faq-section">
+    <div class="faq-question" onclick="toggleAnswer(this)">
+      What is the role of an admin dashboard?
+      <img
+        src="{% static 'assets/downarrow.png' %}"
+        alt="Down Arrow"
+        class="arrow"
+      />
+    </div>
+    <div class="faq-answer">
+      An admin dashboard provides a centralized interface for managing platform
+      data, user accounts, and system settings, helping administrators
+      efficiently control operations.
+    </div>
+  </div>
+  <div class="faq-section">
+    <div class="faq-question" onclick="toggleAnswer(this)">
+      What features are available on the admin dashboard?
+      <img
+        src="{% static 'assets/downarrow.png' %}"
+        alt="Down Arrow"
+        class="arrow"
+      />
+    </div>
+    <div class="faq-answer">
+      The admin dashboard includes user management, content moderation tools,
+      activity tracking, analytics, and settings configurations to ensure smooth
+      platform operation.
+    </div>
+  </div>
+  <div class="faq-section">
+    <div class="faq-question" onclick="toggleAnswer(this)">
+      How can I optimize my admin dashboard experience?
+      <img
+        src="{% static 'assets/downarrow.png' %}"
+        alt="Down Arrow"
+        class="arrow"
+      />
+    </div>
+    <div class="faq-answer">
+      To optimize your experience, customize the layout, prioritize essential
+      metrics, and use filters for quicker access to reports and user activity
+      data.
+    </div>
+  </div>
+  <div class="faq-section">
+    <div class="faq-question" onclick="toggleAnswer(this)">
+      What tasks can be managed through the admin dashboard?
+      <img
+        src="{% static 'assets/downarrow.png' %}"
+        alt="Down Arrow"
+        class="arrow"
+      />
+    </div>
+    <div class="faq-answer">
+      You can manage user roles, oversee content updates, monitor platform
+      performance, handle inquiries, and ensure system security through the
+      admin dashboard.
+    </div>
+  </div>
+</div>
+<!-- footer section -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-section">
+      <h3>Sentiment Park</h3>
+      <p>Lorem ipsum dolor sit amet consectetur. Convallis est urna.</p>
+    </div>
+    <div class="footer-section">
+      <h3>Services</h3>
+      <ul>
+        <li>Text Summarization</li>
+        <li>Data Analysis & Reporting</li>
+        <li>Sentiment Analysis</li>
+        <li>Prodcut Based Chatbot System</li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h3>Contact</h3>
+      <p><i class="fas fa-phone-alt"></i> +977 5464 8272</p>
+      <p>
+        <i class="fas fa-envelope"></i>
+        <a href="mailto:rona@domain.com">sentiment@domain.com</a>
+      </p>
+      <p><i class="fas fa-map-marker-alt"></i> Kathmandu 44600, Nepal</p>
+    </div>
+    <div class="footer-section">
+      <h3>Links</h3>
+      <ul>
+        <li>
+          <a href="#">Privacy Policy</a>
+        </li>
+        <li>
+          <a href="#">Term Of Use</a>
+        </li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h3>Maps</h3>
+      <p>
+        <a href="#">Google Maps</a>
+      </p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="social-media">
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-linkedin-in"></i></a>
+    </div>
+    <!-- Thin white line above copyright -->
+    <div class="footer-line"></div>
+    <p>Copyright 2023 @wecare</p>
+  </div>
+</footer>
+<script>
+  function toggleAnswer(questionElement) {
+    const answerElement = questionElement.nextElementSibling;
+    const arrow = questionElement.querySelector(".arrow");
 
-          // Toggle answer display
-          if (answerElement.style.display === "block") {
-              answerElement.style.display = "none"; 
-              arrow.src = "{% static 'assets/downarrow.png' %}"; 
-          } else {
-              answerElement.style.display = "block"; 
-              arrow.src = "{% static 'assets/uparrow.png' %}"; 
-          }
+    // Toggle answer display
+    if (answerElement.style.display === "block") {
+      answerElement.style.display = "none";
+      arrow.src = "{% static 'assets/downarrow.png' %}";
+    } else {
+      answerElement.style.display = "block";
+      arrow.src = "{% static 'assets/uparrow.png' %}";
+    }
+  }
+
+  const navLinks = document.querySelectorAll(".nav-link");
+
+  // Function to handle adding the 'active' class
+  function activateCurrentPage() {
+    const currentPage = window.location.pathname.split("/").pop();
+
+    // Loop through all the links and check if the href matches the current page
+    navLinks.forEach((link) => {
+      // Remove the active class from all links
+      link.classList.remove("active");
+
+      // If the link's href matches the current page, add 'active' class
+      if (link.getAttribute("href") === currentPage) {
+        link.classList.add("active");
       }
-
-      const navLinks = document.querySelectorAll('.nav-link');
-
-      // Function to handle adding the 'active' class
-      function activateCurrentPage() {
-          
-          const currentPage = window.location.pathname.split("/").pop();
-
-          // Loop through all the links and check if the href matches the current page
-          navLinks.forEach(link => {
-              // Remove the active class from all links
-              link.classList.remove('active');
-
-              // If the link's href matches the current page, add 'active' class
-              if (link.getAttribute('href') === currentPage) {
-                  link.classList.add('active');
-              }
-          });
-      }
-      // Call the function 
-      window.onload = activateCurrentPage;
-
-    </script>
+    });
+  }
+  // Call the function
+  window.onload = activateCurrentPage;
+</script>
 {% endblock body %}
