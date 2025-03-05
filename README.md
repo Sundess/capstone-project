@@ -22,7 +22,7 @@ This project is a web-based application designed to analyze product reviews, sum
 ### Frontend
 
 - **HTML, CSS, JavaScript**: For building a responsive user interface.
-- **Streamlit: For building chatbot interface.**
+- **Streamlit**: For building chatbot interface.
 
 ### NLP & AI
 
