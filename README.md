@@ -63,9 +63,9 @@ This project is a web-based application designed to analyze product reviews, sum
 
 ## Usage
 
+- Access the **Home Page** at `http://127.0.0.1:8000/`.
 - Access the **Admin Dashboard** at `http://127.0.0.1:8000/admin/`.
-- Interact with the **Chatbot** for product-related inquiries.
-- Check **Sentiment Analysis** and **Summarized Reviews** on the product details page.
+- Register and login to use the full functionality.
 
 ## Contributing
 
